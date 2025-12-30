@@ -12,31 +12,65 @@ app.use(express.json());
 app.use(express.static('public'));
 app.use(express.urlencoded({ extended: true }));
 
-// مسارات الملفات
+// إعداد مسارات الملفات لتعمل على Render
 const dataDir = path.join(__dirname, 'data');
+
+// التأكد من وجود مجلد data
+if (!fs.existsSync(dataDir)) {
+    console.log('📁 إنشاء مجلد data...');
+    fs.mkdirSync(dataDir, { recursive: true });
+}
+
 const studentsFile = path.join(dataDir, 'student-results.json');
 const professorsFile = path.join(dataDir, 'professor-results.json');
 const analysisFile = path.join(dataDir, 'combined-analysis.json');
 
-// تأكد من وجود المجلدات
-if (!fs.existsSync(dataDir)) {
-    fs.mkdirSync(dataDir, { recursive: true });
-}
-
 // تهيئة الملفات إذا لم تكن موجودة
 const initFile = (filePath, initialData) => {
-    if (!fs.existsSync(filePath)) {
-        fs.writeFileSync(filePath, JSON.stringify(initialData, null, 2), 'utf8');
+    try {
+        if (!fs.existsSync(filePath)) {
+            console.log(`📄 إنشاء ملف ${path.basename(filePath)}...`);
+            fs.writeFileSync(filePath, JSON.stringify(initialData, null, 2), 'utf8');
+        }
+    } catch (error) {
+        console.error(`❌ خطأ في إنشاء ${filePath}:`, error);
     }
 };
 
+// تهيئة الملفات
 initFile(studentsFile, []);
 initFile(professorsFile, []);
 initFile(analysisFile, {
     summary: {},
     charts: {},
+    insights: [],
     lastUpdated: new Date().toISOString()
 });
+
+// دالة محسنة لقراءة الملفات
+const readJSONFile = (filePath) => {
+    try {
+        if (!fs.existsSync(filePath)) {
+            return [];
+        }
+        const data = fs.readFileSync(filePath, 'utf8');
+        return JSON.parse(data);
+    } catch (error) {
+        console.error(`❌ خطأ في قراءة ${filePath}:`, error);
+        return [];
+    }
+};
+
+// دالة محسنة لكتابة الملفات
+const writeJSONFile = (filePath, data) => {
+    try {
+        fs.writeFileSync(filePath, JSON.stringify(data, null, 2), 'utf8');
+        return true;
+    } catch (error) {
+        console.error(`❌ خطأ في كتابة ${filePath}:`, error);
+        return false;
+    }
+};
 
 // ==================== Routes ====================
 
@@ -45,7 +79,6 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// صفحات الاستبيان
 app.get('/student-survey', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'student-survey.html'));
 });
@@ -54,17 +87,14 @@ app.get('/professor-survey', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'professor-survey.html'));
 });
 
-// صفحة النتائج
 app.get('/results', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'results.html'));
 });
 
-// صفحة الداشبورد
 app.get('/dashboard', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'dashboard.html'));
 });
 
-// صفحة التقرير
 app.get('/report', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'research-report.html'));
 });
@@ -74,67 +104,83 @@ app.get('/report', (req, res) => {
 // حفظ استبيان الطالب
 app.post('/api/survey/student', (req, res) => {
     try {
-        const data = JSON.parse(fs.readFileSync(studentsFile, 'utf8'));
+        console.log('📝 استلام استبيان طالب...');
+        
+        const data = readJSONFile(studentsFile);
         const surveyData = {
             id: Date.now(),
             ...req.body,
             timestamp: new Date().toLocaleString('ar-SA'),
-            ip: req.ip,
+            ip: req.ip || 'غير معروف',
             completionTime: req.body.completionTime || 'غير محدد'
         };
-
+        
+        console.log(`✅ حفظ طالب: ${surveyData.name || 'مجهول'}`);
+        
         data.push(surveyData);
-        fs.writeFileSync(studentsFile, JSON.stringify(data, null, 2), 'utf8');
-
-        // تحديث التحليل
-        updateAnalysis();
-
-        res.json({
-            success: true,
-            message: 'تم حفظ استبيان الطالب بنجاح',
-            id: surveyData.id
-        });
+        
+        if (writeJSONFile(studentsFile, data)) {
+            res.json({ 
+                success: true, 
+                message: 'تم حفظ استبيان الطالب بنجاح',
+                id: surveyData.id
+            });
+        } else {
+            throw new Error('فشل في حفظ الملف');
+        }
     } catch (error) {
-        console.error('Error saving student survey:', error);
-        res.status(500).json({ success: false, message: 'خطأ في حفظ البيانات' });
+        console.error('❌ خطأ في حفظ استبيان الطالب:', error);
+        res.status(500).json({ 
+            success: false, 
+            message: 'خطأ في حفظ البيانات',
+            error: error.message 
+        });
     }
 });
 
 // حفظ استبيان الهيئة التدريسية
 app.post('/api/survey/professor', (req, res) => {
     try {
-        const data = JSON.parse(fs.readFileSync(professorsFile, 'utf8'));
+        console.log('📝 استلام استبيان هيئة تدريسية...');
+        
+        const data = readJSONFile(professorsFile);
         const surveyData = {
             id: Date.now(),
             ...req.body,
             timestamp: new Date().toLocaleString('ar-SA'),
-            ip: req.ip,
+            ip: req.ip || 'غير معروف',
             completionTime: req.body.completionTime || 'غير محدد'
         };
-
+        
+        console.log(`✅ حفظ أستاذ: ${surveyData.name || 'مجهول'}`);
+        
         data.push(surveyData);
-        fs.writeFileSync(professorsFile, JSON.stringify(data, null, 2), 'utf8');
-
-        // تحديث التحليل
-        updateAnalysis();
-
-        res.json({
-            success: true,
-            message: 'تم حفظ استبيان الهيئة التدريسية بنجاح',
-            id: surveyData.id
-        });
+        
+        if (writeJSONFile(professorsFile, data)) {
+            res.json({ 
+                success: true, 
+                message: 'تم حفظ استبيان الهيئة التدريسية بنجاح',
+                id: surveyData.id
+            });
+        } else {
+            throw new Error('فشل في حفظ الملف');
+        }
     } catch (error) {
-        console.error('Error saving professor survey:', error);
-        res.status(500).json({ success: false, message: 'خطأ في حفظ البيانات' });
+        console.error('❌ خطأ في حفظ استبيان الهيئة التدريسية:', error);
+        res.status(500).json({ 
+            success: false, 
+            message: 'خطأ في حفظ البيانات',
+            error: error.message 
+        });
     }
 });
 
 // الحصول على جميع البيانات
 app.get('/api/data/all', (req, res) => {
     try {
-        const students = JSON.parse(fs.readFileSync(studentsFile, 'utf8'));
-        const professors = JSON.parse(fs.readFileSync(professorsFile, 'utf8'));
-
+        const students = readJSONFile(studentsFile);
+        const professors = readJSONFile(professorsFile);
+        
         res.json({
             students,
             professors,
@@ -142,213 +188,59 @@ app.get('/api/data/all', (req, res) => {
                 students: students.length,
                 professors: professors.length,
                 total: students.length + professors.length
-            }
+            },
+            serverTime: new Date().toLocaleString('ar-SA')
         });
     } catch (error) {
-        res.status(500).json({ error: 'خطأ في قراءة البيانات' });
+        console.error('❌ خطأ في قراءة البيانات:', error);
+        res.status(500).json({ 
+            error: 'خطأ في قراءة البيانات',
+            details: error.message 
+        });
     }
 });
 
 // الحصول على التحليلات
 app.get('/api/analysis', (req, res) => {
     try {
-        const analysis = JSON.parse(fs.readFileSync(analysisFile, 'utf8'));
+        const analysis = readJSONFile(analysisFile);
         res.json(analysis);
     } catch (error) {
-        res.status(500).json({ error: 'خطأ في قراءة التحليلات' });
+        console.error('❌ خطأ في قراءة التحليلات:', error);
+        res.status(500).json({ 
+            error: 'خطأ في قراءة التحليلات',
+            details: error.message 
+        });
     }
 });
 
-// تصدير البيانات كـ JSON
-app.get('/api/export/json', (req, res) => {
-    try {
-        const students = JSON.parse(fs.readFileSync(studentsFile, 'utf8'));
-        const professors = JSON.parse(fs.readFileSync(professorsFile, 'utf8'));
-
-        const exportData = {
-            exportDate: new Date().toISOString(),
-            project: "LMS Research Survey",
-            students,
-            professors
-        };
-
-        res.setHeader('Content-Type', 'application/json');
-        res.setHeader('Content-Disposition', 'attachment; filename="lms-research-data.json"');
-        res.send(JSON.stringify(exportData, null, 2));
-    } catch (error) {
-        res.status(500).json({ error: 'خطأ في التصدير' });
-    }
+// API لفحص صحة السيرفر
+app.get('/api/health', (req, res) => {
+    res.json({
+        status: 'healthy',
+        timestamp: new Date().toISOString(),
+        server: 'LMS Research Survey',
+        version: '2.0.0',
+        endpoints: {
+            studentSurvey: '/api/survey/student',
+            professorSurvey: '/api/survey/professor',
+            getAllData: '/api/data/all',
+            getAnalysis: '/api/analysis'
+        }
+    });
 });
 
-// ==================== Helper Functions ====================
-
-function updateAnalysis() {
-    try {
-        const students = JSON.parse(fs.readFileSync(studentsFile, 'utf8'));
-        const professors = JSON.parse(fs.readFileSync(professorsFile, 'utf8'));
-        const allResponses = [...students, ...professors];
-
-        const analysis = {
-            summary: {
-                totalParticipants: allResponses.length,
-                studentCount: students.length,
-                professorCount: professors.length,
-                completionRate: calculateCompletionRate(allResponses),
-                averageTime: calculateAverageTime(allResponses)
-            },
-            charts: {
-                byGender: groupBy(allResponses, 'gender'),
-                byAge: groupBy(allResponses, 'age'),
-                byEducation: groupBy(allResponses, 'educationLevel'),
-                byExperience: groupBy(allResponses, 'experience'),
-                featureRankings: rankFeatures(allResponses),
-                satisfactionLevels: calculateSatisfaction(allResponses)
-            },
-            insights: generateInsights(students, professors),
-            lastUpdated: new Date().toISOString()
-        };
-
-        fs.writeFileSync(analysisFile, JSON.stringify(analysis, null, 2), 'utf8');
-    } catch (error) {
-        console.error('Error updating analysis:', error);
-    }
-}
-
-function groupBy(array, key) {
-    return array.reduce((acc, item) => {
-        const value = item[key] || 'غير محدد';
-        acc[value] = (acc[value] || 0) + 1;
-        return acc;
-    }, {});
-}
-
-function calculateCompletionRate(responses) {
-    const completed = responses.filter(r => r.completed === true).length;
-    return responses.length ? ((completed / responses.length) * 100).toFixed(1) : 0;
-}
-
-function calculateAverageTime(responses) {
-    const times = responses.map(r => parseInt(r.completionTime) || 0);
-    const validTimes = times.filter(t => t > 0);
-    return validTimes.length ?
-        (validTimes.reduce((a, b) => a + b, 0) / validTimes.length).toFixed(1) : 0;
-}
-
-function rankFeatures(responses) {
-    const featureScores = {};
-
-    responses.forEach(response => {
-        if (response.featureRatings) {
-            Object.entries(response.featureRatings).forEach(([feature, rating]) => {
-                if (!featureScores[feature]) {
-                    featureScores[feature] = { total: 0, count: 0 };
-                }
-                featureScores[feature].total += parseInt(rating) || 0;
-                featureScores[feature].count += 1;
-            });
-        }
-    });
-
-    // حساب المتوسطات
-    const averages = {};
-    Object.entries(featureScores).forEach(([feature, data]) => {
-        averages[feature] = data.count ? (data.total / data.count).toFixed(2) : 0;
-    });
-
-    // ترتيب تنازلي
-    return Object.entries(averages)
-        .sort(([, a], [, b]) => b - a)
-        .reduce((acc, [key, value]) => {
-            acc[key] = value;
-            return acc;
-        }, {});
-}
-
-function calculateSatisfaction(responses) {
-    const levels = { 'مرتفع جداً': 0, 'مرتفع': 0, 'متوسط': 0, 'منخفض': 0, 'منخفض جداً': 0 };
-
-    responses.forEach(response => {
-        const satisfaction = response.overallSatisfaction || response.systemUsefulness;
-        if (satisfaction && levels.hasOwnProperty(satisfaction)) {
-            levels[satisfaction]++;
-        }
-    });
-
-    return levels;
-}
-
-function generateInsights(students, professors) {
-    const insights = [];
-
-    // تحليل احتياجات الطلاب
-    if (students.length > 0) {
-        const topStudentNeed = findTopNeed(students, 'needs');
-        if (topStudentNeed) {
-            insights.push(`الطلاب يفضلون: ${topStudentNeed}`);
-        }
-    }
-
-    // تحليل احتياجات المدرسين
-    if (professors.length > 0) {
-        const topProfessorNeed = findTopNeed(professors, 'requirements');
-        if (topProfessorNeed) {
-            insights.push(`الهيئة التدريسية تحتاج: ${topProfessorNeed}`);
-        }
-    }
-
-    // مقارنة الرضا
-    const studentSatisfaction = calculateAverageSatisfaction(students);
-    const professorSatisfaction = calculateAverageSatisfaction(professors);
-
-    if (studentSatisfaction > professorSatisfaction) {
-        insights.push('الطلاب أكثر رضا عن النظام الحالي من الهيئة التدريسية');
-    } else if (professorSatisfaction > studentSatisfaction) {
-        insights.push('الهيئة التدريسية أكثر رضا عن النظام الحالي من الطلاب');
-    }
-
-    return insights.length > 0 ? insights : ['لا توجد insights كافية بعد'];
-}
-
-function findTopNeed(responses, field) {
-    const needs = {};
-    responses.forEach(response => {
-        if (response[field]) {
-            const needList = Array.isArray(response[field]) ? response[field] : [response[field]];
-            needList.forEach(need => {
-                needs[need] = (needs[need] || 0) + 1;
-            });
-        }
-    });
-
-    const sorted = Object.entries(needs).sort(([, a], [, b]) => b - a);
-    return sorted.length > 0 ? sorted[0][0] : null;
-}
-
-function calculateAverageSatisfaction(responses) {
-    const satisfactionMap = {
-        'مرتفع جداً': 5,
-        'مرتفع': 4,
-        'متوسط': 3,
-        'منخفض': 2,
-        'منخفض جداً': 1
-    };
-
-    const scores = responses
-        .map(r => satisfactionMap[r.overallSatisfaction || r.systemUsefulness] || 0)
-        .filter(s => s > 0);
-
-    return scores.length ? scores.reduce((a, b) => a + b, 0) / scores.length : 0;
-}
-
-// ==================== Start Server ====================
+// تشغيل السيرفر
 app.listen(PORT, '0.0.0.0', () => {
     console.log(`
     🚀 سيرفر البحث العلمي يعمل بنجاح!
-    🌐 الرابط المحلي: http://localhost:${PORT}
-    📊 النظام جاهز لجمع بيانات البحث
+    🌐 الرابط: http://localhost:${PORT}
     📅 ${new Date().toLocaleString('ar-SA')}
     `);
-
-    // تحديث التحليل الأولي
-    updateAnalysis();
+    
+    // التحقق من الملفات
+    console.log('🔍 حالة الملفات:');
+    console.log(`   📄 students.json: ${fs.existsSync(studentsFile) ? '✅' : '❌'}`);
+    console.log(`   📄 professors.json: ${fs.existsSync(professorsFile) ? '✅' : '❌'}`);
+    console.log(`   📄 analysis.json: ${fs.existsSync(analysisFile) ? '✅' : '❌'}`);
 });
