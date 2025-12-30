@@ -1,7 +1,7 @@
 {
   "name": "lms-research-survey",
-  "version": "2.0.0",
-  "description": "نظام استبيان بحثي لمشروع LMS - تخرج",
+  "version": "3.0.0",
+  "description": "نظام استبيان بحثي لمشروع LMS - خصوصية أولاً",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
@@ -16,7 +16,7 @@
     "node": ">=14.0.0",
     "npm": ">=6.0.0"
   },
-  "keywords": ["lms", "research", "survey", "education", "e-learning"],
+  "keywords": ["lms", "research", "survey", "education", "privacy", "anonymous"],
   "author": "فريق مشروع التخرج",
   "license": "MIT"
 }
