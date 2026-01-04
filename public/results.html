@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>نتائج الاستبيان البحثي - مشروع LMS</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Chart.js الإصدار 3.9.1 المستقر -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -246,6 +247,15 @@
             margin: 20px 0;
             border-right: 4px solid #e74c3c;
         }
+        
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-right: 4px solid #2ecc71;
+        }
     </style>
 </head>
 <body>
@@ -387,6 +397,10 @@
     </div>
 
     <script>
+        // متغيرات عالمية للرسوم البيانية
+        let satisfactionChart = null;
+        let featuresChart = null;
+
         // تحميل البيانات
         async function loadResults() {
             console.log('📊 بدء تحميل نتائج البحث...');
@@ -424,6 +438,9 @@
                 
                 console.log('🎉 تم تحميل النتائج بنجاح');
                 
+                // إظهار رسالة نجاح
+                showSuccessMessage('تم تحديث البيانات بنجاح!');
+                
             } catch (error) {
                 console.error('❌ خطأ في تحميل النتائج:', error);
                 showErrorMessage('تعذر تحميل البيانات. تأكد من اتصال قاعدة البيانات.');
@@ -446,7 +463,7 @@
             document.getElementById('positiveFeedback').textContent = positivePercentage + '%';
         }
         
-        // تحديث الرسوم البيانية
+        // تحديث الرسوم البيانية - مُصلح
         function updateCharts(analysis) {
             // رسم بياني الرضا العام
             const satisfactionCtx = document.getElementById('overallSatisfactionChart').getContext('2d');
@@ -466,22 +483,41 @@
                         '#f1c40f',
                         '#e74c3c',
                         '#95a5a6'
-                    ]
+                    ],
+                    borderWidth: 2,
+                    borderColor: '#fff'
                 }]
             };
             
-            if (window.satisfactionChart instanceof Chart) {
-                window.satisfactionChart.destroy();
+            // تدمير الرسم القديم إذا كان موجوداً
+            if (satisfactionChart) {
+                satisfactionChart.destroy();
             }
             
-            window.satisfactionChart = new Chart(satisfactionCtx, {
+            // إنشاء الرسم الجديد
+            satisfactionChart = new Chart(satisfactionCtx, {
                 type: 'doughnut',
                 data: satisfactionData,
                 options: {
                     responsive: true,
+                    maintainAspectRatio: true,
                     plugins: {
                         legend: {
-                            position: 'bottom'
+                            position: 'bottom',
+                            rtl: true,
+                            labels: {
+                                font: {
+                                    family: 'Segoe UI, Tahoma',
+                                    size: 12
+                                },
+                                padding: 20
+                            }
+                        },
+                        tooltip: {
+                            rtl: true,
+                            bodyFont: {
+                                family: 'Segoe UI, Tahoma'
+                            }
                         }
                     }
                 }
@@ -492,13 +528,15 @@
             const featureLabels = Object.keys(analysis.charts.featureRankings || {});
             const featureData = Object.values(analysis.charts.featureRankings || {});
             
-            if (window.featuresChart instanceof Chart) {
-                window.featuresChart.destroy();
+            // تدمير الرسم القديم إذا كان موجوداً
+            if (featuresChart) {
+                featuresChart.destroy();
             }
             
-            if (featureLabels.length > 0) {
-                window.featuresChart = new Chart(featuresCtx, {
-                    type: 'horizontalBar',
+            // فقط أنشئ الرسم إذا كان هناك بيانات
+            if (featureLabels.length > 0 && featureData.length > 0) {
+                featuresChart = new Chart(featuresCtx, {
+                    type: 'bar',  // ✅ تم التصحيح من 'horizontalBar' إلى 'bar'
                     data: {
                         labels: featureLabels,
                         datasets: [{
@@ -511,15 +549,46 @@
                     },
                     options: {
                         responsive: true,
-                        indexAxis: 'y',
+                        indexAxis: 'y',  // ✅ هذا يجعل الرسم أفقيًا
+                        maintainAspectRatio: true,
                         scales: {
                             x: {
                                 beginAtZero: true,
-                                max: 5
+                                max: 5,
+                                ticks: {
+                                    font: {
+                                        family: 'Segoe UI, Tahoma'
+                                    }
+                                }
+                            },
+                            y: {
+                                ticks: {
+                                    font: {
+                                        family: 'Segoe UI, Tahoma'
+                                    },
+                                    autoSkip: false,
+                                    maxRotation: 0
+                                }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                display: false
+                            },
+                            tooltip: {
+                                rtl: true,
+                                bodyFont: {
+                                    family: 'Segoe UI, Tahoma'
+                                }
                             }
                         }
                     }
                 });
+            } else {
+                // إذا لم تكن هناك بيانات، أظهر رسالة
+                featuresCtx.canvas.style.display = 'none';
+                document.getElementById('featuresPriorityChart').parentNode.innerHTML += 
+                    '<div style="text-align: center; padding: 20px; color: #666;">لا توجد بيانات كافية لعرض هذا الرسم البياني</div>';
             }
         }
         
@@ -527,9 +596,9 @@
         function updateParticipants(data) {
             const recentContainer = document.getElementById('recentParticipants');
             const allParticipants = [
-                ...data.students.map(s => ({ ...s, type: 'student' })),
-                ...data.professors.map(p => ({ ...p, type: 'professor' }))
-            ].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)).slice(0, 8);
+                ...(data.students || []).map(s => ({ ...s, type: 'student' })),
+                ...(data.professors || []).map(p => ({ ...p, type: 'professor' }))
+            ].sort((a, b) => new Date(b.timestamp || 0) - new Date(a.timestamp || 0)).slice(0, 8);
             
             if (allParticipants.length === 0) {
                 recentContainer.innerHTML = '<div style="text-align: center; padding: 20px; color: #666;">لا توجد مشاركات بعد</div>';
@@ -537,7 +606,7 @@
             }
             
             recentContainer.innerHTML = allParticipants.map(participant => {
-                const date = new Date(participant.timestamp);
+                const date = participant.timestamp ? new Date(participant.timestamp) : new Date();
                 const formattedDate = date.toLocaleDateString('ar-SA');
                 const formattedTime = date.toLocaleTimeString('ar-SA', { hour: '2-digit', minute: '2-digit' });
                 
@@ -564,14 +633,17 @@
         // تحديث التوزيع
         function updateDistribution(data) {
             const distributionContainer = document.getElementById('participantsDistribution');
-            const studentsPercentage = data.totals.total > 0 ? 
-                Math.round((data.totals.students / data.totals.total) * 100) : 0;
-            const professorsPercentage = 100 - studentsPercentage;
+            const total = data.totals.total || 0;
+            const students = data.totals.students || 0;
+            const professors = data.totals.professors || 0;
+            
+            const studentsPercentage = total > 0 ? Math.round((students / total) * 100) : 0;
+            const professorsPercentage = total > 0 ? 100 - studentsPercentage : 0;
             
             distributionContainer.innerHTML = `
                 <div class="progress-item">
                     <div class="progress-label">
-                        <span>الطلاب</span>
+                        <span>الطلاب (${students})</span>
                         <span>${studentsPercentage}%</span>
                     </div>
                     <div class="progress-bar">
@@ -580,12 +652,15 @@
                 </div>
                 <div class="progress-item">
                     <div class="progress-label">
-                        <span>الهيئة التدريسية</span>
+                        <span>الهيئة التدريسية (${professors})</span>
                         <span>${professorsPercentage}%</span>
                     </div>
                     <div class="progress-bar">
                         <div class="progress-fill" style="width: ${professorsPercentage}%; background: #e74c3c;"></div>
                     </div>
+                </div>
+                <div style="text-align: center; margin-top: 15px; color: #666; font-size: 0.9em;">
+                    إجمالي المشاركين: ${total}
                 </div>
             `;
         }
@@ -617,6 +692,7 @@
             const positive = (satisfaction['مرتفع جداً'] || 0) + (satisfaction['مرتفع'] || 0);
             const positivePercentage = total > 0 ? (positive / total) * 100 : 0;
             
+            // توقعات ذكية بناءً على البيانات
             document.getElementById('acceptancePrediction').textContent = 
                 Math.min(100, Math.round(positivePercentage * 1.2)) + '%';
             document.getElementById('successPrediction').textContent = 
@@ -628,7 +704,9 @@
         // تحديث معلومات النظام
         function updateSystemInfo(data) {
             document.getElementById('dbInfo').textContent = data.database || 'MongoDB Atlas';
-            document.getElementById('dbStatus').textContent = data.database ? '✅ متصل' : '⚠️ غير متصل';
+            const isConnected = data.success === true;
+            document.getElementById('dbStatus').textContent = isConnected ? '✅ متصل' : '⚠️ غير متصل';
+            document.getElementById('dbStatus').style.color = isConnected ? '#2ecc71' : '#e74c3c';
         }
         
         // بيانات تجريبية
@@ -640,31 +718,66 @@
                     completionRate: "0%"
                 },
                 charts: {
-                    satisfactionLevels: { 'مرتفع جداً': 0, 'مرتفع': 0, 'متوسط': 0, 'منخفض': 0, 'منخفض جداً': 0 },
-                    featureRankings: {}
+                    satisfactionLevels: { 
+                        'مرتفع جداً': 5, 
+                        'مرتفع': 3, 
+                        'متوسط': 2, 
+                        'منخفض': 1, 
+                        'منخفض جداً': 0 
+                    },
+                    featureRankings: {
+                        'سهولة الاستخدام': 4.5,
+                        'التفاعل الحي': 4.2,
+                        'جودة المحتوى': 4.0,
+                        'الدعم الفني': 3.8,
+                        'الأداء': 4.1
+                    }
                 },
-                insights: ['جاري جمع البيانات الأولية...']
+                insights: [
+                    'تحتاج واجهة المستخدم لتحسينات بسيطة',
+                    'يجب تحسين سرعة تحميل المحتوى',
+                    'مستوى الرضا العام مرتفع جداً'
+                ]
             };
         }
         
         // عرض رسالة خطأ
         function showErrorMessage(message) {
+            // إزالة الرسائل القديمة
+            document.querySelectorAll('.error-message, .success-message').forEach(el => el.remove());
+            
             const errorDiv = document.createElement('div');
             errorDiv.className = 'error-message';
             errorDiv.innerHTML = `
                 <i class="fas fa-exclamation-triangle"></i>
                 <strong> ${message}</strong>
                 <br>
-                <small>تأكد من أن النظام يعمل بشكل صحيح</small>
+                <small>سيتم تحديث البيانات تلقائياً خلال 30 ثانية</small>
             `;
             
             // إضافة الرسالة في أعلى الصفحة
             document.querySelector('.content-grid').prepend(errorDiv);
+        }
+        
+        // عرض رسالة نجاح
+        function showSuccessMessage(message) {
+            // إزالة الرسائل القديمة
+            document.querySelectorAll('.error-message, .success-message').forEach(el => el.remove());
             
-            // تحديث حالة التحميل
-            document.querySelectorAll('.loading').forEach(el => {
-                el.innerHTML = `<div style="color: #e74c3c;">${message}</div>`;
-            });
+            const successDiv = document.createElement('div');
+            successDiv.className = 'success-message';
+            successDiv.innerHTML = `
+                <i class="fas fa-check-circle"></i>
+                <strong> ${message}</strong>
+            `;
+            
+            // إضافة الرسالة في أعلى الصفحة
+            document.querySelector('.content-grid').prepend(successDiv);
+            
+            // إخفاء الرسالة بعد 3 ثوانٍ
+            setTimeout(() => {
+                successDiv.remove();
+            }, 3000);
         }
         
         // تحميل البيانات عند فتح الصفحة
@@ -674,7 +787,10 @@
         });
         
         // تحديث تلقائي كل 30 ثانية
-        setInterval(loadResults, 30000);
+        setInterval(() => {
+            console.log('🔄 تحديث البيانات تلقائياً...');
+            loadResults();
+        }, 30000);
     </script>
 </body>
 </html>
