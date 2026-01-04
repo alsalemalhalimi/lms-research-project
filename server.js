@@ -140,101 +140,59 @@ app.get('/keep-alive', (req, res) => {
 });
 
 // صفحة حالة النظام
-app.get('/system-status', (req, res) => {
-    const status = {
-        system: 'LMS Research Survey System',
-        version: '2.0.0',
-        status: 'operational',
-        serverTime: new Date().toLocaleString('ar-SA'),
-        timestamp: new Date().toISOString(),
-        uptime: `${Math.floor(process.uptime() / 60)} دقائق`,
-        memory: {
-            used: `${(process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2)} MB`,
-            total: `${(process.memoryUsage().heapTotal / 1024 / 1024).toFixed(2)} MB`,
-            percentage: `${((process.memoryUsage().heapUsed / process.memoryUsage().heapTotal) * 100).toFixed(1)}%`
-        },
-        keepAlive: {
-            enabled: true,
-            interval: '5 دقائق',
-            nextPing: new Date(Date.now() + KEEP_ALIVE_INTERVAL).toLocaleString('ar-SA')
-        },
-        endpoints: [
-            { path: '/', method: 'GET', description: 'الصفحة الرئيسية' },
-            { path: '/student-survey', method: 'GET', description: 'استبيان الطلاب' },
-            { path: '/professor-survey', method: 'GET', description: 'استبيان الهيئة التدريسية' },
-            { path: '/dashboard', method: 'GET', description: 'لوحة التحكم' },
-            { path: '/report', method: 'GET', description: 'التقرير البحثي' },
-            { path: '/keep-alive', method: 'GET', description: 'نقطة Keep-Alive' },
-            { path: '/system-status', method: 'GET', description: 'حالة النظام' }
-        ],
-        dataStats: {
-            totalFiles: 0,
-            totalSize: '0 KB'
-        }
-    };
-    
+// نقطة نهاية Keep-Alive للخدمات الخارجية
+app.get('/keep-alive', (req, res) => {
     try {
-        // حساب حجم الملفات
-        let totalSize = 0;
-        let fileCount = 0;
+        const health = {
+            status: 'active',
+            serverTime: new Date().toLocaleString('ar-SA'),
+            timestamp: new Date().toISOString(),
+            uptime: process.uptime(),
+            memory: {
+                heapUsed: `${(process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2)} MB`,
+                heapTotal: `${(process.memoryUsage().heapTotal / 1024 / 1024).toFixed(2)} MB`,
+                rss: `${(process.memoryUsage().rss / 1024 / 1024).toFixed(2)} MB`
+            },
+            system: {
+                platform: process.platform,
+                nodeVersion: process.version,
+                pid: process.pid
+            },
+            database: {
+                students: 0,
+                professors: 0,
+                total: 0
+            }
+        };
         
-        if (fs.existsSync(dataDir)) {
-            const files = fs.readdirSync(dataDir);
-            fileCount = files.length;
-            
-            files.forEach(file => {
-                const filePath = path.join(dataDir, file);
-                const stats = fs.statSync(filePath);
-                totalSize += stats.size;
-            });
-        }
-        
-        status.dataStats.totalFiles = fileCount;
-        status.dataStats.totalSize = `${(totalSize / 1024).toFixed(2)} KB`;
-        
-    } catch (error) {
-        status.dataStats.error = error.message;
-    }
-    
-    res.json(status);
-});
-
-// ==================== APIs ====================
-
-// حفظ استبيان الطالب
-app.post('/api/survey/student', (req, res) => {
-    try {
-        let data = [];
+        // قراءة بيانات الطلاب
         if (fs.existsSync(studentsFile)) {
-            const fileData = fs.readFileSync(studentsFile, 'utf8');
-            if (fileData.trim()) {
-                data = JSON.parse(fileData);
+            const studentsData = fs.readFileSync(studentsFile, 'utf8');
+            if (studentsData.trim()) {
+                const students = JSON.parse(studentsData);
+                health.database.students = students.length;
             }
         }
         
-        const surveyData = {
-            id: Date.now(),
-            ...req.body,
-            timestamp: new Date().toLocaleString('ar-SA'),
-            ip: req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress,
-            completionTime: req.body.completionTime || 'غير محدد'
-        };
+        // قراءة بيانات الهيئة التدريسية
+        if (fs.existsSync(professorsFile)) {
+            const professorsData = fs.readFileSync(professorsFile, 'utf8');
+            if (professorsData.trim()) {
+                const professors = JSON.parse(professorsData);
+                health.database.professors = professors.length;
+            }
+        }
         
-        data.push(surveyData);
-        fs.writeFileSync(studentsFile, JSON.stringify(data, null, 2), 'utf8');
+        health.database.total = health.database.students + health.database.professors;
         
-        // تحديث التحليل
-        updateAnalysis();
-        
-        res.json({ 
-            success: true, 
-            message: 'تم حفظ استبيان الطالب بنجاح',
-            id: surveyData.id,
-            timestamp: surveyData.timestamp
-        });
+        res.json(health);
     } catch (error) {
-        console.error('Error saving student survey:', error);
-        res.status(500).json({ success: false, message: 'خطأ في حفظ البيانات', error: error.message });
+        res.json({
+            status: 'error',
+            message: 'خطأ في قراءة البيانات',
+            error: error.message,
+            timestamp: new Date().toISOString()
+        });
     }
 });
 
