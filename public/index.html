@@ -486,7 +486,7 @@
                 <span class="card-time"><i class="far fa-clock"></i> ⏱️ 12 دقائق</span>
             </a>
 
-            <a href="/dashboard" class="card dashboard-card">
+           <a href="#" onclick="checkPassword('dashboard')" class="card dashboard-card">
                 <div class="card-icon">📊</div>
                 <h2>لوحة التحكم والنتائج</h2>
                 <p>عرض النتائج الحية، الإحصائيات، والتحليلات المتقدمة للبيانات المجمعة.</p>
@@ -581,6 +581,25 @@
             console.log('🚀 نظام الاستبيان البحثي جاهز!');
             console.log('📊 يمكنك البدء في جمع البيانات البحثية');
         };
+        // وظيفة التحقق من كلمة المرور
+function checkPassword(page) {
+    const password = prompt('🔐 الرجاء إدخال كلمة المرور للوصول:', '');
+    
+    if (password === 'salem') {
+        // كلمة المرور صحيحة
+        if (page === 'dashboard') {
+            window.location.href = '/dashboard';
+        } else if (page === 'results') {
+            window.location.href = '/results';
+        }
+    } else if (password === null) {
+        // المستخدم ألغى
+        console.log('تم إلغاء الدخول');
+    } else {
+        // كلمة المرور خاطئة
+        alert('❌ كلمة المرور غير صحيحة!');
+    }
+}
     </script>
 </body>
 
