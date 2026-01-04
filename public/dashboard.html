@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -19,8 +18,8 @@
             background: #f5f7fa;
             color: #333;
         }
-        /* شريط التنقل */
         
+        /* شريط التنقل */
         .navbar {
             background: linear-gradient(135deg, #1a2980 0%, #26d0ce 100%);
             color: white;
@@ -60,15 +59,15 @@
             background: rgba(255, 255, 255, 0.2);
             border: 1px solid rgba(255, 255, 255, 0.3);
         }
-        /* المحتوى الرئيسي */
         
+        /* المحتوى الرئيسي */
         .container {
             max-width: 1400px;
             margin: 0 auto;
             padding: 20px;
         }
-        /* بطاقات الإحصائيات */
         
+        /* بطاقات الإحصائيات */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -98,12 +97,12 @@
             border-top-color: #e74c3c;
         }
         
-        .stat-card.anonymous {
+        .stat-card.completion {
             border-top-color: #9b59b6;
         }
         
-        .stat-card.privacy {
-            border-top-color: #3498db;
+        .stat-card.database {
+            border-top-color: #f1c40f;
         }
         
         .stat-icon {
@@ -119,12 +118,12 @@
             color: #e74c3c;
         }
         
-        .stat-card.anonymous .stat-icon {
+        .stat-card.completion .stat-icon {
             color: #9b59b6;
         }
         
-        .stat-card.privacy .stat-icon {
-            color: #3498db;
+        .stat-card.database .stat-icon {
+            color: #f1c40f;
         }
         
         .stat-number {
@@ -137,33 +136,8 @@
             color: #666;
             font-size: 1.1em;
         }
-        /* شريط الخصوصية */
         
-        .privacy-bar {
-            background: linear-gradient(135deg, #2ecc71, #27ae60);
-            color: white;
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 25px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 15px;
-        }
-        
-        .privacy-info {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-        
-        .privacy-percentage {
-            font-size: 2.5em;
-            font-weight: bold;
-        }
         /* الرسوم البيانية */
-        
         .charts-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
@@ -186,8 +160,8 @@
             align-items: center;
             gap: 10px;
         }
-        /* جدول النتائج */
         
+        /* جدول النتائج */
         .data-section {
             background: white;
             padding: 30px;
@@ -248,8 +222,8 @@
         .export-btn.pdf:hover {
             background: #c0392b;
         }
-        /* الجداول */
         
+        /* الجداول */
         .table-container {
             overflow-x: auto;
         }
@@ -298,12 +272,7 @@
             color: #721c24;
         }
         
-        .badge.anonymous {
-            background: #e8eaf6;
-            color: #3949ab;
-        }
         /* الإحصائيات التفصيلية */
-        
         .insights-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -326,8 +295,8 @@
             align-items: center;
             gap: 10px;
         }
-        /* التحميل */
         
+        /* التحميل */
         .loading {
             text-align: center;
             padding: 50px;
@@ -340,32 +309,30 @@
             margin-bottom: 15px;
             color: #3498db;
         }
-        /* متجاوب */
         
+        /* متجاوب */
         @media (max-width: 768px) {
             .charts-grid {
                 grid-template-columns: 1fr;
             }
+            
             .nav-links {
                 flex-direction: column;
                 gap: 10px;
             }
+            
             .navbar {
                 flex-direction: column;
                 gap: 15px;
                 text-align: center;
             }
+            
             .export-buttons {
                 flex-direction: column;
-            }
-            .privacy-bar {
-                flex-direction: column;
-                text-align: center;
             }
         }
     </style>
 </head>
-
 <body>
     <!-- شريط التنقل -->
     <nav class="navbar">
@@ -374,7 +341,7 @@
             <span>لوحة تحكم البحث العلمي</span>
         </div>
         <div class="nav-links">
-            <a href="/" class="active"><i class="fas fa-home"></i> الرئيسية</a>
+            <a href="/"><i class="fas fa-home"></i> الرئيسية</a>
             <a href="/results"><i class="fas fa-chart-bar"></i> النتائج</a>
             <a href="/report"><i class="fas fa-file-pdf"></i> التقرير</a>
             <a href="#" id="refreshBtn"><i class="fas fa-sync-alt"></i> تحديث</a>
@@ -383,21 +350,6 @@
 
     <!-- المحتوى الرئيسي -->
     <div class="container">
-        <!-- شريط الخصوصية -->
-        <div class="privacy-bar">
-            <div class="privacy-info">
-                <i class="fas fa-shield-alt" style="font-size: 2em;"></i>
-                <div>
-                    <h3 style="margin: 0; font-size: 1.3em;">نظام خصوصية متقدم</h3>
-                    <p style="margin: 5px 0 0 0; opacity: 0.9;">جميع المشاركات تحمي هوية المشاركين</p>
-                </div>
-            </div>
-            <div id="privacyStats" style="text-align: center;">
-                <div class="privacy-percentage">0%</div>
-                <div>مشاركة مجهولة</div>
-            </div>
-        </div>
-
         <!-- بطاقات الإحصائيات -->
         <div class="stats-grid">
             <div class="stat-card students">
@@ -407,7 +359,7 @@
                 <div class="stat-number" id="totalStudents">0</div>
                 <div class="stat-label">عدد الطلاب</div>
             </div>
-
+            
             <div class="stat-card professors">
                 <div class="stat-icon">
                     <i class="fas fa-chalkboard-teacher"></i>
@@ -415,7 +367,7 @@
                 <div class="stat-number" id="totalProfessors">0</div>
                 <div class="stat-label">عدد أعضاء الهيئة التدريسية</div>
             </div>
-
+            
             <div class="stat-card">
                 <div class="stat-icon">
                     <i class="fas fa-users"></i>
@@ -423,13 +375,21 @@
                 <div class="stat-number" id="totalParticipants">0</div>
                 <div class="stat-label">إجمالي المشاركين</div>
             </div>
-
-            <div class="stat-card anonymous">
+            
+            <div class="stat-card completion">
                 <div class="stat-icon">
-                    <i class="fas fa-user-secret"></i>
+                    <i class="fas fa-percentage"></i>
                 </div>
-                <div class="stat-number" id="anonymousCount">0</div>
-                <div class="stat-label">مشاركة مجهولة</div>
+                <div class="stat-number" id="completionRate">0%</div>
+                <div class="stat-label">معدل إكمال الاستبيان</div>
+            </div>
+            
+            <div class="stat-card database">
+                <div class="stat-icon">
+                    <i class="fas fa-database"></i>
+                </div>
+                <div class="stat-number" id="databaseStatus">✅</div>
+                <div class="stat-label">قاعدة البيانات</div>
             </div>
         </div>
 
@@ -437,30 +397,34 @@
         <div class="charts-grid">
             <div class="chart-container">
                 <div class="chart-title">
-                    <i class="fas fa-user-secret" style="color: #9b59b6;"></i> أنواع المشاركة
-                </div>
-                <canvas id="participationTypeChart"></canvas>
-            </div>
-
-            <div class="chart-container">
-                <div class="chart-title">
-                    <i class="fas fa-star" style="color: #f1c40f;"></i> توزيع الرضا العام
+                    <i class="fas fa-star" style="color: #f1c40f;"></i>
+                    توزيع الرضا العام
                 </div>
                 <canvas id="satisfactionChart"></canvas>
             </div>
-
+            
             <div class="chart-container">
                 <div class="chart-title">
-                    <i class="fas fa-graduation-cap" style="color: #2ecc71;"></i> توزيع الطلاب حسب التخصص
+                    <i class="fas fa-cogs" style="color: #3498db;"></i>
+                    تقييم الميزات الرئيسية
+                </div>
+                <canvas id="featuresChart"></canvas>
+            </div>
+            
+            <div class="chart-container">
+                <div class="chart-title">
+                    <i class="fas fa-graduation-cap" style="color: #2ecc71;"></i>
+                    توزيع الطلاب حسب التخصص
                 </div>
                 <canvas id="studentsMajorChart"></canvas>
             </div>
-
+            
             <div class="chart-container">
                 <div class="chart-title">
-                    <i class="fas fa-university" style="color: #e74c3c;"></i> توزيع الهيئة التدريسية حسب الخبرة
+                    <i class="fas fa-university" style="color: #e74c3c;"></i>
+                    توزيع حسب المستوى الأكاديمي
                 </div>
-                <canvas id="professorsExperienceChart"></canvas>
+                <canvas id="academicLevelChart"></canvas>
             </div>
         </div>
 
@@ -468,34 +432,36 @@
         <div class="data-section">
             <div class="section-header">
                 <div class="section-title">
-                    <i class="fas fa-history"></i> أحدث المشاركات
+                    <i class="fas fa-history"></i>
+                    أحدث المشاركات
                 </div>
                 <div class="export-buttons">
                     <button class="export-btn" onclick="exportData('json')">
                         <i class="fas fa-file-export"></i> تصدير JSON
                     </button>
-                    <button class="export-btn" onclick="window.print()">
-                        <i class="fas fa-print"></i> طباعة التقرير
+                    <button class="export-btn" onclick="window.location.href='/report'">
+                        <i class="fas fa-file-pdf"></i> التقرير الكامل
                     </button>
                 </div>
             </div>
-
+            
             <div class="table-container">
                 <table id="recentSubmissions">
                     <thead>
                         <tr>
                             <th>النوع</th>
-                            <th>الاسم المعروض</th>
+                            <th>الاسم</th>
                             <th>التخصص/القسم</th>
                             <th>الرضا</th>
-                            <th>الحالة</th>
+                            <th>الوقت</th>
                             <th>التاريخ</th>
                         </tr>
                     </thead>
                     <tbody id="submissionsTable">
                         <tr>
                             <td colspan="6" class="loading">
-                                <i class="fas fa-spinner fa-spin"></i><br> جاري تحميل البيانات...
+                                <i class="fas fa-spinner fa-spin"></i><br>
+                                جاري تحميل البيانات...
                             </td>
                         </tr>
                     </tbody>
@@ -506,38 +472,46 @@
         <!-- الإحصائيات التفصيلية -->
         <div class="data-section">
             <div class="section-title">
-                <i class="fas fa-chart-pie"></i> تحليلات متقدمة
+                <i class="fas fa-chart-pie"></i>
+                تحليلات متقدمة
             </div>
-
+            
             <div class="insights-grid" id="insightsContainer">
                 <!-- سيتم ملؤها بالجافاسكريبت -->
             </div>
         </div>
 
-        <!-- جدول المشاكل الشائعة -->
+        <!-- معلومات قاعدة البيانات -->
         <div class="data-section">
             <div class="section-title">
-                <i class="fas fa-exclamation-triangle"></i> المشاكل والتحديات الشائعة
+                <i class="fas fa-database"></i>
+                معلومات النظام
             </div>
-
-            <div class="table-container">
-                <table id="commonProblems">
-                    <thead>
-                        <tr>
-                            <th>المشكلة</th>
-                            <th>عدد الطلاب</th>
-                            <th>عدد الهيئة التدريسية</th>
-                            <th>النسبة المئوية</th>
-                        </tr>
-                    </thead>
-                    <tbody id="problemsTable">
-                        <tr>
-                            <td colspan="4" class="loading">
-                                <i class="fas fa-spinner fa-spin"></i><br> جاري تحليل المشاكل...
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+            
+            <div class="stats-grid" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));">
+                <div class="stat-card" style="border-top-color: #1a2980;">
+                    <div class="stat-icon">
+                        <i class="fas fa-server"></i>
+                    </div>
+                    <div class="stat-number" id="dbType">MongoDB</div>
+                    <div class="stat-label">نوع قاعدة البيانات</div>
+                </div>
+                
+                <div class="stat-card" style="border-top-color: #2ecc71;">
+                    <div class="stat-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="stat-number" id="dbStatus">متصل</div>
+                    <div class="stat-label">حالة الاتصال</div>
+                </div>
+                
+                <div class="stat-card" style="border-top-color: #3498db;">
+                    <div class="stat-icon">
+                        <i class="fas fa-history"></i>
+                    </div>
+                    <div class="stat-number" id="lastUpdate">الآن</div>
+                    <div class="stat-label">آخر تحديث</div>
+                </div>
             </div>
         </div>
     </div>
@@ -545,81 +519,74 @@
     <script>
         // تحميل البيانات
         async function loadDashboardData() {
+            console.log('🚀 بدء تحميل بيانات لوحة التحكم...');
+            
             try {
-                const [dataResponse, analysisResponse, anonymousResponse] = await Promise.all([
-                    fetch('/api/data/all'),
-                    fetch('/api/analysis'),
-                    fetch('/api/stats/anonymous')
-                ]);
-
+                // جلب البيانات الأساسية
+                const dataResponse = await fetch('/api/data/all');
+                if (!dataResponse.ok) {
+                    throw new Error(`خطأ في استجابة API: ${dataResponse.status}`);
+                }
                 const data = await dataResponse.json();
-                const analysis = await analysisResponse.json();
-                const anonymousStats = await anonymousResponse.json();
-
-                updateStats(data, analysis, anonymousStats);
+                console.log('✅ تم تحميل البيانات:', data);
+                
+                // جلب التحليلات
+                let analysis = { summary: {}, charts: {}, insights: [] };
+                try {
+                    const analysisResponse = await fetch('/api/analysis');
+                    if (analysisResponse.ok) {
+                        analysis = await analysisResponse.json();
+                        console.log('✅ تم تحميل التحليلات:', analysis);
+                    }
+                } catch (analysisError) {
+                    console.warn('⚠️ خطأ في تحميل التحليلات:', analysisError);
+                    analysis = createMockAnalysis(data);
+                }
+                
+                // تحديث واجهة المستخدم
+                updateStats(data, analysis);
                 updateCharts(data, analysis);
                 updateTables(data);
                 updateInsights(analysis);
                 updateProblems(data);
-                updatePrivacyStats(anonymousStats);
+                updateSystemInfo(data, analysis);
+                
+                console.log('🎉 تم تحديث لوحة التحكم بنجاح');
+                
             } catch (error) {
-                console.error('Error loading dashboard data:', error);
+                console.error('❌ خطأ في تحميل البيانات:', error);
+                showErrorMessage(error);
             }
         }
-
+        
         // تحديث الإحصائيات
-        function updateStats(data, analysis, anonymousStats) {
-            document.getElementById('totalStudents').textContent = data.totals.students;
-            document.getElementById('totalProfessors').textContent = data.totals.professors;
-            document.getElementById('totalParticipants').textContent = data.totals.total;
-            document.getElementById('anonymousCount').textContent = anonymousStats.totalAnonymous;
+        function updateStats(data, analysis) {
+            console.log('📊 تحديث الإحصائيات:', data.totals);
+            
+            document.getElementById('totalStudents').textContent = data.totals.students || 0;
+            document.getElementById('totalProfessors').textContent = data.totals.professors || 0;
+            document.getElementById('totalParticipants').textContent = data.totals.total || 0;
+            document.getElementById('completionRate').textContent = analysis.summary.completionRate ? 
+                analysis.summary.completionRate + '%' : '0%';
+            document.getElementById('databaseStatus').textContent = data.database ? '✅' : '⚠️';
         }
-
-        // تحديث إحصائيات الخصوصية
-        function updatePrivacyStats(anonymousStats) {
-            const privacyStats = document.getElementById('privacyStats');
-            privacyStats.innerHTML = `
-                <div class="privacy-percentage">${anonymousStats.anonymousPercentage}%</div>
-                <div>مشاركة مجهولة</div>
-            `;
-        }
-
+        
         // تحديث الرسوم البيانية
         function updateCharts(data, analysis) {
-            // رسم بياني أنواع المشاركة
-            const participationCtx = document.getElementById('participationTypeChart').getContext('2d');
-            const participationData = {
-                named: analysis.charts.participationTypes ? .named || 0,
-                anonymous: analysis.charts.participationTypes ? .anonymous || 0
-            };
-
-            new Chart(participationCtx, {
-                type: 'pie',
-                data: {
-                    labels: ['مشاركة بأسماء', 'مشاركة مجهولة'],
-                    datasets: [{
-                        data: [participationData.named, participationData.anonymous],
-                        backgroundColor: ['#3498db', '#9b59b6']
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            position: 'bottom'
-                        }
-                    }
-                }
-            });
-
+            console.log('📈 تحديث الرسوم البيانية');
+            
             // رسم بياني الرضا
             const satisfactionCtx = document.getElementById('satisfactionChart').getContext('2d');
+            if (window.satisfactionChart instanceof Chart) {
+                window.satisfactionChart.destroy();
+            }
+            
             const satisfactionLabels = ['مرتفع جداً', 'مرتفع', 'متوسط', 'منخفض', 'منخفض جداً'];
-            const satisfactionData = satisfactionLabels.map(label =>
+            const satisfactionData = satisfactionLabels.map(label => 
                 analysis.charts.satisfactionLevels[label] || 0
             );
-
-            new Chart(satisfactionCtx, {
+            
+            window.satisfactionChart = new Chart(satisfactionCtx, {
                 type: 'doughnut',
                 data: {
                     labels: satisfactionLabels,
@@ -643,112 +610,164 @@
                     }
                 }
             });
-
+            
+            // رسم بياني الميزات
+            const featuresCtx = document.getElementById('featuresChart').getContext('2d');
+            if (window.featuresChart instanceof Chart) {
+                window.featuresChart.destroy();
+            }
+            
+            const featureLabels = Object.keys(analysis.charts.featureRankings || {});
+            const featureData = Object.values(analysis.charts.featureRankings || {});
+            
+            if (featureLabels.length > 0) {
+                window.featuresChart = new Chart(featuresCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: featureLabels,
+                        datasets: [{
+                            label: 'متوسط التقييم (1-5)',
+                            data: featureData,
+                            backgroundColor: '#3498db'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                max: 5
+                            }
+                        }
+                    }
+                });
+            }
+            
             // رسم بياني تخصصات الطلاب
             const studentsMajorCtx = document.getElementById('studentsMajorChart').getContext('2d');
+            if (window.studentsMajorChart instanceof Chart) {
+                window.studentsMajorChart.destroy();
+            }
+            
             const majorLabels = Object.keys(analysis.charts.byMajor || {});
             const majorData = Object.values(analysis.charts.byMajor || {});
-
-            new Chart(studentsMajorCtx, {
-                type: 'polarArea',
-                data: {
-                    labels: majorLabels,
-                    datasets: [{
-                        data: majorData,
-                        backgroundColor: [
-                            '#2ecc71',
-                            '#3498db',
-                            '#9b59b6',
-                            '#e74c3c',
-                            '#f1c40f',
-                            '#1abc9c'
-                        ]
-                    }]
-                }
-            });
-
-            // رسم بياني خبرة الهيئة التدريسية
-            const professorsExpCtx = document.getElementById('professorsExperienceChart').getContext('2d');
-            const expLabels = Object.keys(analysis.charts.byExperience || {});
-            const expData = Object.values(analysis.charts.byExperience || {});
-
-            new Chart(professorsExpCtx, {
-                type: 'pie',
-                data: {
-                    labels: expLabels,
-                    datasets: [{
-                        data: expData,
-                        backgroundColor: [
-                            '#e74c3c',
-                            '#3498db',
-                            '#2ecc71',
-                            '#f1c40f'
-                        ]
-                    }]
-                }
-            });
+            
+            if (majorLabels.length > 0) {
+                window.studentsMajorChart = new Chart(studentsMajorCtx, {
+                    type: 'pie',
+                    data: {
+                        labels: majorLabels,
+                        datasets: [{
+                            data: majorData,
+                            backgroundColor: [
+                                '#2ecc71',
+                                '#3498db',
+                                '#9b59b6',
+                                '#e74c3c',
+                                '#f1c40f'
+                            ]
+                        }]
+                    }
+                });
+            }
+            
+            // رسم بياني المستوى الأكاديمي
+            const academicLevelCtx = document.getElementById('academicLevelChart').getContext('2d');
+            if (window.academicLevelChart instanceof Chart) {
+                window.academicLevelChart.destroy();
+            }
+            
+            const levelLabels = Object.keys(analysis.charts.byAcademicLevel || {});
+            const levelData = Object.values(analysis.charts.byAcademicLevel || {});
+            
+            if (levelLabels.length > 0) {
+                window.academicLevelChart = new Chart(academicLevelCtx, {
+                    type: 'polarArea',
+                    data: {
+                        labels: levelLabels,
+                        datasets: [{
+                            data: levelData,
+                            backgroundColor: [
+                                '#e74c3c',
+                                '#3498db',
+                                '#2ecc71',
+                                '#f1c40f',
+                                '#9b59b6'
+                            ]
+                        }]
+                    }
+                });
+            }
         }
-
+        
         // تحديث الجداول
         function updateTables(data) {
+            console.log('📋 تحديث الجداول');
+            
             const submissionsTable = document.getElementById('submissionsTable');
             const allSubmissions = [
-                ...data.students.map(s => ({
-                    ...s,
-                    type: 'student',
-                    displayName: s.name,
-                    isAnonymous: s.participationType === 'anonymous'
-                })),
-                ...data.professors.map(p => ({
-                    ...p,
-                    type: 'professor',
-                    displayName: p.name,
-                    isAnonymous: p.participationType === 'anonymous'
-                }))
+                ...data.students.map(s => ({ ...s, type: 'student' })),
+                ...data.professors.map(p => ({ ...p, type: 'professor' }))
             ].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-
-            submissionsTable.innerHTML = allSubmissions.slice(0, 10).map(sub => `
-                <tr>
-                    <td>
-                        <span class="badge ${sub.type} ${sub.isAnonymous ? 'anonymous' : ''}">
-                            ${sub.type === 'student' ? 'طالب' : 'هيئة تدريس'}
-                            ${sub.isAnonymous ? ' (مجهول)' : ''}
-                        </span>
-                    </td>
-                    <td>
-                        ${sub.displayName || 'مشارك مجهول'}
-                        ${sub.isAnonymous ? ' <i class="fas fa-user-secret" style="color: #9b59b6; margin-right: 5px;"></i>' : ''}
-                    </td>
-                    <td>${sub.major || sub.department || 'غير محدد'}</td>
-                    <td>
-                        ${getSatisfactionLabel(sub.overallSatisfaction || sub.systemUsefulness)}
-                    </td>
-                    <td>
-                        ${sub.isAnonymous ? 
-                            '<span style="color: #9b59b6;"><i class="fas fa-user-secret"></i> مجهول</span>' : 
-                            '<span style="color: #2ecc71;"><i class="fas fa-user-check"></i> باسم</span>'}
-                    </td>
-                    <td>${sub.timestamp || 'غير محدد'}</td>
-                </tr>
-            `).join('') || '<tr><td colspan="6">لا توجد بيانات</td></tr>';
+            
+            if (allSubmissions.length === 0) {
+                submissionsTable.innerHTML = `
+                    <tr>
+                        <td colspan="6" style="text-align: center; padding: 30px; color: #666;">
+                            <i class="fas fa-inbox" style="font-size: 2em; margin-bottom: 10px;"></i><br>
+                            لا توجد مشاركات بعد<br>
+                            <small>شارك الروابط لبدء جمع البيانات</small>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            submissionsTable.innerHTML = allSubmissions.slice(0, 10).map(sub => {
+                const date = new Date(sub.timestamp);
+                const formattedDate = date.toLocaleDateString('ar-SA');
+                const formattedTime = date.toLocaleTimeString('ar-SA', { hour: '2-digit', minute: '2-digit' });
+                
+                return `
+                    <tr>
+                        <td>
+                            <span class="badge ${sub.type}">
+                                ${sub.type === 'student' ? 'طالب' : 'هيئة تدريس'}
+                            </span>
+                        </td>
+                        <td>${sub.name || 'مجهول'}</td>
+                        <td>${sub.major || sub.department || 'غير محدد'}</td>
+                        <td>
+                            ${sub.overallSatisfaction || sub.systemUsefulness || 'غير محدد'}
+                            ${sub.overallSatisfaction && typeof sub.overallSatisfaction === 'number' ? '/5' : ''}
+                        </td>
+                        <td>${sub.completionTime || 'غير معروف'} دقيقة</td>
+                        <td>${formattedDate}<br><small>${formattedTime}</small></td>
+                    </tr>
+                `;
+            }).join('');
         }
-
-        function getSatisfactionLabel(score) {
-            const labels = {
-                '5': 'مرتفع جداً',
-                '4': 'مرتفع',
-                '3': 'متوسط',
-                '2': 'منخفض',
-                '1': 'منخفض جداً'
-            };
-            return labels[score] || score || 'غير محدد';
-        }
-
+        
         // تحديث التحليلات
         function updateInsights(analysis) {
+            console.log('💡 تحديث التحليلات');
+            
             const insightsContainer = document.getElementById('insightsContainer');
             const insights = analysis.insights || [];
-
+            
+            if (insights.length === 0) {
+                insightsContainer.innerHTML = `
+                    <div class="insight-card">
+                        <div class="insight-title">
+                            <i class="fas fa-info-circle"></i>
+                            لا توجد تحليلات كافية
+                        </div>
+                        <p>جاري جمع المزيد من البيانات لإنشاء تحليلات دقيقة</p>
+                    </div>
+                `;
+                return;
+            }
+            
             insightsContainer.innerHTML = insights.map(insight => `
                 <div class="insight-card">
                     <div class="insight-title">
@@ -756,83 +775,60 @@
                         ${insight}
                     </div>
                 </div>
-            `).join('') || '<div>لا توجد تحليلات متاحة</div>';
+            `).join('');
         }
-
+        
         // تحديث المشاكل الشائعة
         function updateProblems(data) {
-            const problemsTable = document.getElementById('problemsTable');
-
-            // تحليل المشاكل المشتركة
-            const commonProblems = {
-                'ضعف الإنترنت': {
-                    students: 0,
-                    professors: 0
-                },
-                'صعوبة التحضير': {
-                    students: 0,
-                    professors: 0
-                },
-                'مشاكل الاختبارات': {
-                    students: 0,
-                    professors: 0
-                },
-                'تفاعل الطلاب': {
-                    students: 0,
-                    professors: 0
-                },
-                'مشاكل تقنية': {
-                    students: 0,
-                    professors: 0
-                }
-            };
-
-            // عد مشاكل الطلاب
-            data.students.forEach(student => {
-                if (student.currentProblems) {
-                    student.currentProblems.forEach(problem => {
-                        if (commonProblems[problem]) {
-                            commonProblems[problem].students++;
-                        }
-                    });
-                }
-            });
-
-            // عد مشاكل الهيئة التدريسية
-            data.professors.forEach(professor => {
-                if (professor.examProblems) {
-                    professor.examProblems.forEach(problem => {
-                        if (commonProblems[problem]) {
-                            commonProblems[problem].professors++;
-                        }
-                    });
-                }
-                if (professor.teachingChallenges) {
-                    professor.teachingChallenges.forEach(problem => {
-                        if (commonProblems[problem]) {
-                            commonProblems[problem].professors++;
-                        }
-                    });
-                }
-            });
-
-            // إنشاء صفوف الجدول
-            problemsTable.innerHTML = Object.entries(commonProblems).map(([problem, counts]) => {
-                const total = counts.students + counts.professors;
-                const percentage = data.totals.total > 0 ?
-                    ((total / data.totals.total) * 100).toFixed(1) : 0;
-
-                return `
-                    <tr>
-                        <td>${problem}</td>
-                        <td>${counts.students}</td>
-                        <td>${counts.professors}</td>
-                        <td>${percentage}%</td>
-                    </tr>
-                `;
-            }).join('');
+            // يمكن إضافة تحليل للمشاكل هنا لاحقاً
         }
-
+        
+        // تحديث معلومات النظام
+        function updateSystemInfo(data, analysis) {
+            document.getElementById('dbType').textContent = data.database || 'MongoDB Atlas';
+            document.getElementById('dbStatus').textContent = 'متصل ✅';
+            document.getElementById('lastUpdate').textContent = analysis.lastUpdated || 'الآن';
+        }
+        
+        // بيانات تجريبية للتحليلات
+        function createMockAnalysis(data) {
+            return {
+                summary: {
+                    totalParticipants: data.totals.total || 0,
+                    studentCount: data.totals.students || 0,
+                    professorCount: data.totals.professors || 0,
+                    completionRate: "0%",
+                    averageTime: "0.0"
+                },
+                charts: {
+                    satisfactionLevels: { 'مرتفع جداً': 0, 'مرتفع': 0, 'متوسط': 0, 'منخفض': 0, 'منخفض جداً': 0 },
+                    featureRankings: {},
+                    byMajor: {},
+                    byDepartment: {},
+                    byAcademicLevel: {},
+                    byExperience: {}
+                },
+                insights: ['جاري جمع البيانات الأولية...']
+            };
+        }
+        
+        // عرض رسالة خطأ
+        function showErrorMessage(error) {
+            const submissionsTable = document.getElementById('submissionsTable');
+            submissionsTable.innerHTML = `
+                <tr>
+                    <td colspan="6" style="text-align: center; color: #e74c3c; padding: 20px;">
+                        <i class="fas fa-exclamation-triangle"></i><br>
+                        خطأ في تحميل البيانات<br>
+                        <small>${error.message || 'تأكد من اتصال قاعدة البيانات'}</small><br>
+                        <button onclick="loadDashboardData()" style="margin-top: 10px; padding: 8px 16px; background: #3498db; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                            <i class="fas fa-sync-alt"></i> إعادة المحاولة
+                        </button>
+                    </td>
+                </tr>
+            `;
+        }
+        
         // تصدير البيانات
         async function exportData(format) {
             try {
@@ -849,21 +845,24 @@
                     window.URL.revokeObjectURL(url);
                 }
             } catch (error) {
-                alert('حدث خطأ أثناء التصدير');
+                alert('حدث خطأ أثناء التصدير: ' + error.message);
             }
         }
-
+        
         // تحديث البيانات يدوياً
-        document.getElementById('refreshBtn').addEventListener('click', () => {
+        document.getElementById('refreshBtn').addEventListener('click', (e) => {
+            e.preventDefault();
             loadDashboardData();
         });
-
+        
         // تحميل البيانات عند فتح الصفحة
-        loadDashboardData();
-
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('📱 تحميل لوحة التحكم...');
+            loadDashboardData();
+        });
+        
         // تحديث تلقائي كل دقيقة
         setInterval(loadDashboardData, 60000);
     </script>
 </body>
-
 </html>
