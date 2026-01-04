@@ -738,8 +738,8 @@
                         <td>${sub.name || 'مجهول'}</td>
                         <td>${sub.major || sub.department || 'غير محدد'}</td>
                         <td>
-                            ${sub.overallSatisfaction || sub.systemUsefulness || 'غير محدد'}
-                            ${sub.overallSatisfaction && typeof sub.overallSatisfaction === 'number' ? '/5' : ''}
+${sub.overallSatisfaction || sub.systemUsefulness || 'غير محدد'}
+${(sub.overallSatisfaction && typeof sub.overallSatisfaction === 'number') ? '/5' : ''}
                         </td>
                         <td>${sub.completionTime || 'غير معروف'} دقيقة</td>
                         <td>${formattedDate}<br><small>${formattedTime}</small></td>
