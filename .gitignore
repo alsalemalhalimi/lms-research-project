@@ -1,7 +1,6 @@
 # ملفات نظام التشغيل
 .DS_Store
 Thumbs.db
-desktop.ini
 
 # بيئة Node.js
 node_modules/
@@ -13,7 +12,6 @@ yarn-error.log*
 .env
 .env.local
 .env.production
-.env.development
 
 # ملفات IDE
 .vscode/
@@ -22,29 +20,10 @@ yarn-error.log*
 *.swo
 
 # ملفات النظام
-data/*.json
-!data/student-results.json
-!data/professor-results.json
-!data/combined-analysis.json
-
-# ملفات مؤقتة
+data/  # لم نعد نستخدم ملفات JSON محلية
 tmp/
 temp/
 
-# ملفات الاختبار
-coverage/
-.nyc_output
-
-# ملفات البناء
-dist/
-build/
-out/
-
-# ملفات السجل
-logs/
-*.log
-
-# ملفات النظام
-*.pid
-*.seed
-*.pid.lock
+# ملفات MongoDB المحلية
+*.mongodb
+*.mongo
