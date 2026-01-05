@@ -746,6 +746,65 @@
                         </label>
                     </div>
                 </div>
+
+
+
+<!-- السؤال الجديد - ضعه هنا -->
+<div class="question-group">
+    <label class="question">ما مدى ثقتك في نظام التصحيح الآلي لأوراق الاختبار؟</label>
+    
+    <!-- الشرح التوضيحي -->
+    <div style="background: #f0f8ff; padding: 15px; border-radius: 10px; margin: 10px 0; border-right: 4px solid #4CAF50;">
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+            <i class="fas fa-robot" style="color: #4CAF50; font-size: 1.2em;"></i>
+            <span style="font-weight: bold; color: #2c3e50;">كيف يعمل النظام:</span>
+        </div>
+        <p style="color: #555; line-height: 1.6; margin: 0;">
+            يقوم النظام بتصوير أوراق الإجابة (بكاميرا الهاتف ) لاساله الاختيارات والصح والخطاء
+            ثم <strong>مسحها آلياً</strong> باستخدام نموذج ذكا اصطناعي مدرب مسبقا  
+            لقراءة الإجابات وحساب الدرجات <strong>تلقائياً وبشكل فوري</strong>.
+        </p>
+    </div>
+    
+    <!-- خيارات الإجابة -->
+    <div class="options-grid">
+        <label class="option-label">
+            <input type="radio" name="autoGradingTrust" value="عالية جداً">
+            <span class="option-content">
+                <div>عالية جداً</div>
+                <div style="font-size: 0.85em; color: #666;">(أثق به كلياً)</div>
+            </span>
+        </label>
+        <label class="option-label">
+            <input type="radio" name="autoGradingTrust" value="عالية">
+            <span class="option-content">
+                <div>عالية</div>
+                <div style="font-size: 0.85em; color: #666;">(أثق به مع مراجعة بسيطة)</div>
+            </span>
+        </label>
+        <label class="option-label">
+            <input type="radio" name="autoGradingTrust" value="متوسطة">
+            <span class="option-content">
+                <div>متوسطة</div>
+                <div style="font-size: 0.85em; color: #666;">(بحاجة لتأكيد بشري)</div>
+            </span>
+        </label>
+        <label class="option-label">
+            <input type="radio" name="autoGradingTrust" value="منخفضة">
+            <span class="option-content">
+                <div>منخفضة</div>
+                <div style="font-size: 0.85em; color: #666;">(أفضل التصحيح البشري)</div>
+            </span>
+        </label>
+    </div>
+    
+    <!-- تلميح إضافي -->
+    <span class="field-hint">
+        <i class="fas fa-info-circle"></i>
+        هذا النظام يوفر الوقت ويقلل الأخطاء البشرية في التصحيح
+    </span>
+</div>
+                
                 
                 <div class="question-group">
                     <label class="question">هل تعاني من مشاكل في كاميرا هاتفك؟</label>
