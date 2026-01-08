@@ -1308,33 +1308,123 @@
         }
         
         // التحقق من صحة القسم الحالي
-        function validateCurrentSection() {
-            const section = document.getElementById(`section${currentSection}`);
-            const requiredInputs = section.querySelectorAll('[required]');
+// التحقق من صحة القسم الحالي
+function validateCurrentSection() {
+    const section = document.getElementById(`section${currentSection}`);
+    const requiredInputs = section.querySelectorAll('[required]');
+    
+    console.log(`🔍 التحقق من القسم ${currentSection} - ${requiredInputs.length} حقل مطلوب`);
+    
+    let allValid = true;
+    let firstInvalidField = null;
+    
+    for (const input of requiredInputs) {
+        console.log(`  - ${input.name} (${input.type}): ${input.value || 'فارغ'}`);
+        
+        // للحقول المخفية (hidden inputs)
+        if (input.type === 'hidden') {
+            if (!input.value || input.value.trim() === '') {
+                console.log(`❌ الحقل المخفي فارغ: ${input.name}`);
+                
+                // تسليط الضوء على مجموعة التقييم
+                const questionName = input.name;
+                const ratingScale = section.querySelector(`.rating-scale[data-question="${questionName}"]`);
+                
+                if (ratingScale) {
+                    highlightRatingScale(ratingScale);
+                    if (!firstInvalidField) firstInvalidField = ratingScale;
+                }
+                
+                allValid = false;
+            }
+        }
+        // لعناصر الراديو
+        else if (input.type === 'radio') {
+            const radioName = input.name;
+            const isChecked = section.querySelector(`input[name="${radioName}"]:checked`);
             
-            for (const input of requiredInputs) {
-                if (!input.value || (input.type === 'radio' && !section.querySelector(`input[name="${input.name}"]:checked`))) {
-                    input.style.borderColor = '#e74c3c';
-                    input.style.boxShadow = '0 0 0 2px rgba(231, 76, 60, 0.2)';
+            if (!isChecked) {
+                console.log(`❌ عنصر الراديو غير محدد: ${radioName}`);
+                
+                const radioGroup = input.closest('.options-grid') || input.closest('.question-group');
+                if (radioGroup) {
+                    radioGroup.style.border = '2px solid #e74c3c';
+                    radioGroup.style.borderRadius = '10px';
+                    radioGroup.style.padding = '10px';
                     
                     setTimeout(() => {
-                        input.style.borderColor = '#ddd';
-                        input.style.boxShadow = '';
-                    }, 2000);
-                    
-                    // التمرير للحقل المطلوب
-                    input.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    return false;
+                        radioGroup.style.border = '';
+                        radioGroup.style.padding = '';
+                    }, 3000);
                 }
+                
+                if (!firstInvalidField) firstInvalidField = radioGroup;
+                allValid = false;
             }
-            
-            // إذا كان القسم 3 (ميزات النظام)، تحقق من التقييمات
-            if (currentSection === 3) {
-                return validateAllRatings();
-            }
-            
-            return true;
         }
+        // للحقول النصية والقوائم المنسدلة
+        else {
+            if (!input.value || input.value.trim() === '') {
+                console.log(`❌ الحقل النصي فارغ: ${input.name}`);
+                
+                input.style.borderColor = '#e74c3c';
+                input.style.boxShadow = '0 0 0 2px rgba(231, 76, 60, 0.2)';
+                
+                setTimeout(() => {
+                    input.style.borderColor = '#ddd';
+                    input.style.boxShadow = '';
+                }, 3000);
+                
+                if (!firstInvalidField) firstInvalidField = input;
+                allValid = false;
+            }
+        }
+    }
+    
+    // التمرير للحقل الأول غير الصالح
+    if (firstInvalidField) {
+        firstInvalidField.scrollIntoView({ 
+            behavior: 'smooth', 
+            block: 'center',
+            inline: 'center'
+        });
+    }
+    
+    if (!allValid) {
+        console.log(`❌ القسم ${currentSection} غير صالح`);
+    } else {
+        console.log(`✅ القسم ${currentSection} صالح`);
+    }
+    
+    return allValid;
+}
+
+// دالة مساعدة لتسليط الضوء على مجموعة التقييم
+function highlightRatingScale(ratingScale) {
+    if (!ratingScale) return;
+    
+    ratingScale.style.border = '2px solid #e74c3c';
+    ratingScale.style.borderRadius = '10px';
+    ratingScale.style.padding = '5px';
+    ratingScale.style.backgroundColor = 'rgba(231, 76, 60, 0.1)';
+    ratingScale.style.transition = 'all 0.3s ease';
+    
+    // إضافة رسالة خطأ
+    const questionLabel = ratingScale.closest('.question-group').querySelector('label');
+    if (questionLabel && !questionLabel.querySelector('.rating-error-hint')) {
+        const errorHint = document.createElement('div');
+        errorHint.className = 'rating-error-hint';
+        errorHint.innerHTML = '<i class="fas fa-exclamation-circle"></i> يرجى اختيار تقييم';
+        questionLabel.appendChild(errorHint);
+        
+        setTimeout(() => {
+            errorHint.remove();
+            ratingScale.style.border = '';
+            ratingScale.style.padding = '';
+            ratingScale.style.backgroundColor = '';
+        }, 3000);
+    }
+}
         
         // ========== نظام الإشعارات ==========
         
