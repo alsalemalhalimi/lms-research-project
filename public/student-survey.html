@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
@@ -188,6 +188,16 @@
             justify-content: space-between;
             gap: 10px;
             margin-top: 10px;
+            position: relative;
+        }
+        
+        .rating-scale.small {
+            gap: 5px;
+        }
+        
+        .rating-scale.small .rating-item {
+            padding: 10px 5px;
+            font-size: 1em;
         }
         
         .rating-item {
@@ -199,6 +209,8 @@
             border-radius: 10px;
             cursor: pointer;
             transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
         }
         
         .rating-item:hover {
@@ -207,9 +219,20 @@
         }
         
         .rating-item.active {
-            background: #2ecc71;
-            color: white;
-            border-color: #27ae60;
+            background: #2ecc71 !important;
+            color: white !important;
+            border-color: #27ae60 !important;
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(46, 204, 113, 0.3);
+            z-index: 2;
+        }
+        
+        .rating-item.active:hover {
+            background: #27ae60 !important;
+        }
+        
+        .rating-item:active {
+            transform: scale(0.95);
         }
         
         .rating-value {
@@ -341,6 +364,16 @@
                 flex-direction: column;
             }
             
+            .rating-scale.small {
+                flex-direction: row;
+                flex-wrap: wrap;
+            }
+            
+            .rating-scale.small .rating-item {
+                flex: 1 0 18%;
+                margin: 1%;
+            }
+            
             .nav-buttons {
                 flex-direction: column;
                 gap: 15px;
@@ -350,6 +383,14 @@
                 width: 100%;
                 justify-content: center;
             }
+        }
+        
+        /* تحسينات لنظام التقييم */
+        .rating-scale:has(.rating-item.active) {
+            border: 2px solid rgba(46, 204, 113, 0.2);
+            border-radius: 10px;
+            padding: 5px;
+            transition: all 0.3s ease;
         }
     </style>
 </head>
@@ -377,63 +418,64 @@
             <p>✅ البيانات تجمع <strong>للغرض البحثي فقط</strong></p>
             <p>✅ جميع الإجابات سرية ومشفرة</p>
         </div>
+        
         <!-- فريق التطوير -->
-<div class="team-section" style="
-    background: linear-gradient(135deg, #3498db, #2980b9);
-    color: white;
-    padding: 20px;
-    border-radius: 15px;
-    margin-bottom: 25px;
-    text-align: center;
-">
-    <h3 style="margin-bottom: 15px; display: flex; align-items: center; justify-content: center; gap: 10px;">
-        <i class="fas fa-users"></i>
-        فريق تطوير نظام LMS المتكامل
-    </h3>
-    
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin: 20px 0;">
-        <div class="team-member">
-            <div style="font-size: 2em;">👨‍💻</div>
-            <div style="font-weight: bold;">سالم الحالمي</div>
-            <div style="font-size: 0.9em; opacity: 0.9;">مطور رئيسي مشرف عام مطور خوادم</div>
+        <div class="team-section" style="
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            text-align: center;
+        ">
+            <h3 style="margin-bottom: 15px; display: flex; align-items: center; justify-content: center; gap: 10px;">
+                <i class="fas fa-users"></i>
+                فريق تطوير نظام LMS المتكامل
+            </h3>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin: 20px 0;">
+                <div class="team-member">
+                    <div style="font-size: 2em;">👨‍💻</div>
+                    <div style="font-weight: bold;">سالم الحالمي</div>
+                    <div style="font-size: 0.9em; opacity: 0.9;">مطور رئيسي مشرف عام مطور خوادم</div>
+                </div>
+                
+                <div class="team-member">
+                    <div style="font-size: 2em;">👨‍🎓</div>
+                    <div style="font-weight: bold;">أحمد زيدان</div>
+                    <div style="font-size: 0.9em; opacity: 0.9;">مطور واجهات</div>
+                </div>
+                
+                <div class="team-member">
+                    <div style="font-size: 2em;">🔧</div>
+                    <div style="font-weight: bold;">عمران عازب</div>
+                    <div style="font-size: 0.9em; opacity: 0.9;">مطور أنظمة</div>
+                </div>
+                
+                <div class="team-member">
+                    <div style="font-size: 2em;">🎨</div>
+                    <div style="font-weight: bold;">محمد المريسي</div>
+                    <div style="font-size: 0.9em; opacity: 0.9;"> مصمم واجهات وخوارزميات </div>
+                </div>
+                
+                <div class="team-member">
+                    <div style="font-size: 2em;">📱</div>
+                    <div style="font-weight: bold;">بدر الدين عقبه</div>
+                    <div style="font-size: 0.9em; opacity: 0.9;">مطور تطبيقات</div>
+                </div>
+                
+                <div class="team-member">
+                    <div style="font-size: 2em;">⚡</div>
+                    <div style="font-weight: bold;"> طارق الشامي </div>
+                    <div style="font-size: 0.9em; opacity: 0.9;">مطور </div>
+                </div>
+            </div>
+            
+            <p style="margin-top: 15px; font-size: 0.95em; opacity: 0.9;">
+                <i class="fas fa-university"></i>
+                كلية العلوم التطبيقيه النادرة  - العميده د.\إلطاف المعمري 
+            </p>
         </div>
-        
-        <div class="team-member">
-            <div style="font-size: 2em;">👨‍🎓</div>
-            <div style="font-weight: bold;">أحمد زيدان</div>
-            <div style="font-size: 0.9em; opacity: 0.9;">مطور واجهات</div>
-        </div>
-        
-        <div class="team-member">
-            <div style="font-size: 2em;">🔧</div>
-            <div style="font-weight: bold;">عمران عازب</div>
-            <div style="font-size: 0.9em; opacity: 0.9;">مطور أنظمة</div>
-        </div>
-        
-        <div class="team-member">
-            <div style="font-size: 2em;">🎨</div>
-            <div style="font-weight: bold;">محمد المريسي</div>
-            <div style="font-size: 0.9em; opacity: 0.9;"> مصمم واجهات وخوارزميات </div>
-        </div>
-        
-        <div class="team-member">
-            <div style="font-size: 2em;">📱</div>
-            <div style="font-weight: bold;">بدر الدين عقبه</div>
-            <div style="font-size: 0.9em; opacity: 0.9;">مطور تطبيقات</div>
-        </div>
-        
-        <div class="team-member">
-            <div style="font-size: 2em;">⚡</div>
-            <div style="font-weight: bold;"> طارق الشامي </div>
-            <div style="font-size: 0.9em; opacity: 0.9;">مطور </div>
-        </div>
-    </div>
-    
-    <p style="margin-top: 15px; font-size: 0.95em; opacity: 0.9;">
-        <i class="fas fa-university"></i>
-        كلية العلوم التطبيقيه النادرة  - العميده د.\إلطاف المعمري 
-    </p>
-</div>
 
         <!-- نموذج الاستبيان -->
         <form id="surveyForm" class="survey-form">
@@ -517,12 +559,12 @@
             <div class="form-section" id="section2" style="display: none;">
                 <div class="section-title">
                     <i class="fas fa-star"></i>
-                    <h2>تقييم النظام المقترح </h2>
+                    <h2>تقييم النظام المقترح</h2>
                 </div>
                 
                 <div class="question-group">
                     <label class="question required">ما مدى رضاك عن نظام التعليم الإلكتروني المقترح؟</label>
-                    <div class="rating-scale">
+                    <div class="rating-scale" data-question="currentSystemRating">
                         <div class="rating-item" data-value="5">
                             <div class="rating-value">5</div>
                             <div class="rating-label">ممتاز</div>
@@ -544,7 +586,7 @@
                             <div class="rating-label">ضعيف</div>
                         </div>
                     </div>
-                    <input type="hidden" id="currentSystemRating" name="currentSystemRating">
+                    <input type="hidden" name="currentSystemRating" id="input-currentSystemRating">
                 </div>
                 
                 <div class="question-group">
@@ -586,7 +628,7 @@
                 </div>
                 
                 <div class="question-group">
-                    <label class="question">أي منصة تستخدم حاليًا؟(هل استخدمت منصة  للتعليم من قبل )</label>
+                    <label class="question">أي منصة تستخدم حاليًا؟(هل استخدمت منصة للتعليم من قبل )</label>
                     <div class="options-grid">
                         <label class="option-label">
                             <input type="radio" name="currentPlatform" value="Blackboard">
@@ -625,131 +667,135 @@
                 
                 <div class="question-group">
                     <label class="question required">ما مدى أهمية الميزات التالية بالنسبة لك؟</label>
-                  <p class="field-hint">
-    (1 = غير مهم)<br>
-    (5 = مهم جداً)
-                   <br>
-</p>
+                    <p class="field-hint">
+                        (1 = غير مهم)<br>
+                        (5 = مهم جداً)
+                        <br>
+                    </p>
                     
                     <div class="feature-rating">
                         <div style="margin-bottom: 20px;">
-                         <label style="display: block; margin-bottom: 8px; line-height: 1.5;">
-    <span style="font-weight: 600; color: #2c3e50; font-size: 1.05em;">
-        1. نظام إدارة المحاضرات
-    </span>
-    <br>
-    <span style="font-size: 0.95em; color: #555; display: block; margin-top: 5px; padding-right: 10px;">
-        (نظام بث المحاضرات والتفاعل معها في البيئة التعليمية المحلية الواسعة 
-        <strong>بدون إنترنت</strong> / أو عن بعد <strong>عبر الإنترنت</strong>)
-    </span>
-</label>
-                            <div class="rating-scale small">
+                            <label style="display: block; margin-bottom: 8px; line-height: 1.5;">
+                                <span style="font-weight: 600; color: #2c3e50; font-size: 1.05em;">
+                                    1. نظام إدارة المحاضرات
+                                </span>
+                                <br>
+                                <span style="font-size: 0.95em; color: #555; display: block; margin-top: 5px; padding-right: 10px;">
+                                    (نظام بث المحاضرات والتفاعل معها في البيئة التعليمية المحلية الواسعة 
+                                    <strong>بدون إنترنت</strong> / أو عن بعد <strong>عبر الإنترنت</strong>)
+                                </span>
+                            </label>
+                            <div class="rating-scale small" data-question="featureLectures">
                                 <div class="rating-item" data-value="1">1</div>
                                 <div class="rating-item" data-value="2">2</div>
                                 <div class="rating-item" data-value="3">3</div>
                                 <div class="rating-item" data-value="4">4</div>
                                 <div class="rating-item" data-value="5">5</div>
                             </div>
-                            <input type="hidden" name="featureLectures" class="feature-rating-input">
+                            <input type="hidden" name="featureLectures" id="input-featureLectures">
                         </div>
                         
                         <div style="margin-bottom: 20px;">
-<label>2. نظام التحضير الآلي (QR Code/تلقائي/جغرافي)</label>
-                            <div class="rating-scale small">
+                            <label style="font-weight: 600; color: #2c3e50; font-size: 1.05em;">
+                                2. نظام التحضير الآلي (QR Code/تلقائي/جغرافي)
+                            </label>
+                            <div class="rating-scale small" data-question="featureAttendance">
                                 <div class="rating-item" data-value="1">1</div>
                                 <div class="rating-item" data-value="2">2</div>
                                 <div class="rating-item" data-value="3">3</div>
                                 <div class="rating-item" data-value="4">4</div>
                                 <div class="rating-item" data-value="5">5</div>
                             </div>
-                            <input type="hidden" name="featureAttendance" class="feature-rating-input">
-                        </div>
-                        
-                        <div style="margin-bottom: 20px;">
-                           <label style="display: block; margin-bottom: 15px;">
-    <div style="font-weight: 600; color: #2c3e50; margin-bottom: 8px; 
-                padding-bottom: 5px; border-bottom: 2px solid #f0f0f0;">
-        3. نظام مراقبة الاختبارات العملية
-    </div>
-    <div style="background: #fff8e1; padding: 12px; border-radius: 8px; 
-                border-right: 3px solid #ffb300; margin-top: 8px; font-size: 0.95em; color: #555;">
-        <div style="display: flex; align-items: flex-start; gap: 10px; margin-bottom: 8px;">
-            <i class="fas fa-desktop" style="color: #ff9800; font-size: 1.1em; margin-top: 2px;"></i>
-            <span>
-                <strong>كيف يعمل:</strong> نظام يسمح ببث شاشات الطلاب إلى جهاز المراقب
-                لمراقبتها أثناء الاختبارات العملية
-            </span>
-        </div>
-        <div style="display: flex; align-items: flex-start; gap: 10px;">
-            <i class="fas fa-network-wired" style="color: #4caf50; font-size: 1.1em; margin-top: 2px;"></i>
-            <span>
-                <strong>الميزة:</strong> يعمل كموقع ويب ضمن الشبكة المحلية
-                <span style="background: #e8f5e9; padding: 2px 6px; border-radius: 4px; 
-                            margin-right: 5px; font-weight: bold; color: #2e7d32;">
-                    لا يتطلب إنترنت
-                </span>
-            </span>
-        </div>
-    </div>
-</label>
-                            <div class="rating-scale small">
-                                <div class="rating-item" data-value="1">1</div>
-                                <div class="rating-item" data-value="2">2</div>
-                                <div class="rating-item" data-value="3">3</div>
-                                <div class="rating-item" data-value="4">4</div>
-                                <div class="rating-item" data-value="5">5</div>
-                            </div>
-                            <input type="hidden" name="featureMonitoring" class="feature-rating-input">
+                            <input type="hidden" name="featureAttendance" id="input-featureAttendance">
                         </div>
                         
                         <div style="margin-bottom: 20px;">
                             <label style="display: block; margin-bottom: 15px;">
-    <div style="font-weight: 600; color: #2c3e50; margin-bottom: 8px; 
-                padding-bottom: 5px; border-bottom: 2px solid #f0f0f0;">
-        4. نظام إدارة الاختبارات الإلكترونية
-    </div>
-    <div style="background: #e8f5e9; padding: 12px; border-radius: 8px; 
-                border-right: 3px solid #4caf50; margin-top: 8px; font-size: 0.95em; color: #2e7d32;">
-        <div style="display: flex; align-items: flex-start; gap: 10px; margin-bottom: 8px;">
-            <i class="fas fa-file-alt" style="color: #4caf50; font-size: 1.1em; margin-top: 2px;"></i>
-            <span>
-                <strong>منظومة متكاملة</strong> لإنشاء وإدارة الاختبارات الإلكترونية بأنواع مختلفة
-            </span>
-        </div>
-        <div style="display: flex; align-items: flex-start; gap: 10px; margin-bottom: 8px;">
-            <i class="fas fa-robot" style="color: #2196f3; font-size: 1.1em; margin-top: 2px;"></i>
-            <span>
-                <strong>تصحيح آلي:</strong> تصحيح الاختبارات الإلكترونية تلقائياً وفورياً
-            </span>
-        </div>
-        <div style="display: flex; align-items: flex-start; gap: 10px;">
-            <i class="fas fa-scanner" style="color: #ff9800; font-size: 1.1em; margin-top: 2px;"></i>
-            <span>
-                <strong>مسح أوراق:</strong> إمكانية تصحيح أوراق الاختبارات الورقية آلياً باستخدام الماسح الضوئي
-            </span>
-        </div>
-    </div>
-</label>
-                            <div class="rating-scale small">
+                                <div style="font-weight: 600; color: #2c3e50; margin-bottom: 8px; 
+                                            padding-bottom: 5px; border-bottom: 2px solid #f0f0f0;">
+                                    3. نظام مراقبة الاختبارات العملية
+                                </div>
+                                <div style="background: #fff8e1; padding: 12px; border-radius: 8px; 
+                                            border-right: 3px solid #ffb300; margin-top: 8px; font-size: 0.95em; color: #555;">
+                                    <div style="display: flex; align-items: flex-start; gap: 10px; margin-bottom: 8px;">
+                                        <i class="fas fa-desktop" style="color: #ff9800; font-size: 1.1em; margin-top: 2px;"></i>
+                                        <span>
+                                            <strong>كيف يعمل:</strong> نظام يسمح ببث شاشات الطلاب إلى جهاز المراقب
+                                            لمراقبتها أثناء الاختبارات العملية
+                                        </span>
+                                    </div>
+                                    <div style="display: flex; align-items: flex-start; gap: 10px;">
+                                        <i class="fas fa-network-wired" style="color: #4caf50; font-size: 1.1em; margin-top: 2px;"></i>
+                                        <span>
+                                            <strong>الميزة:</strong> يعمل كموقع ويب ضمن الشبكة المحلية
+                                            <span style="background: #e8f5e9; padding: 2px 6px; border-radius: 4px; 
+                                                        margin-right: 5px; font-weight: bold; color: #2e7d32;">
+                                                لا يتطلب إنترنت
+                                            </span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </label>
+                            <div class="rating-scale small" data-question="featureMonitoring">
                                 <div class="rating-item" data-value="1">1</div>
                                 <div class="rating-item" data-value="2">2</div>
                                 <div class="rating-item" data-value="3">3</div>
                                 <div class="rating-item" data-value="4">4</div>
                                 <div class="rating-item" data-value="5">5</div>
                             </div>
-                            <input type="hidden" name="featureExams" class="feature-rating-input">
+                            <input type="hidden" name="featureMonitoring" id="input-featureMonitoring">
                         </div>
                         
                         <div style="margin-bottom: 20px;">
-                            <label>5. نظام إدارة الأنشطة والواجبات</label>
-                            <div class="rating-scale small">
+                            <label style="display: block; margin-bottom: 15px;">
+                                <div style="font-weight: 600; color: #2c3e50; margin-bottom: 8px; 
+                                            padding-bottom: 5px; border-bottom: 2px solid #f0f0f0;">
+                                    4. نظام إدارة الاختبارات الإلكترونية
+                                </div>
+                                <div style="background: #e8f5e9; padding: 12px; border-radius: 8px; 
+                                            border-right: 3px solid #4caf50; margin-top: 8px; font-size: 0.95em; color: #2e7d32;">
+                                    <div style="display: flex; align-items: flex-start; gap: 10px; margin-bottom: 8px;">
+                                        <i class="fas fa-file-alt" style="color: #4caf50; font-size: 1.1em; margin-top: 2px;"></i>
+                                        <span>
+                                            <strong>منظومة متكاملة</strong> لإنشاء وإدارة الاختبارات الإلكترونية بأنواع مختلفة
+                                        </span>
+                                    </div>
+                                    <div style="display: flex; align-items: flex-start; gap: 10px; margin-bottom: 8px;">
+                                        <i class="fas fa-robot" style="color: #2196f3; font-size: 1.1em; margin-top: 2px;"></i>
+                                        <span>
+                                            <strong>تصحيح آلي:</strong> تصحيح الاختبارات الإلكترونية تلقائياً وفورياً
+                                        </span>
+                                    </div>
+                                    <div style="display: flex; align-items: flex-start; gap: 10px;">
+                                        <i class="fas fa-scanner" style="color: #ff9800; font-size: 1.1em; margin-top: 2px;"></i>
+                                        <span>
+                                            <strong>مسح أوراق:</strong> إمكانية تصحيح أوراق الاختبارات الورقية آلياً باستخدام الماسح الضوئي
+                                        </span>
+                                    </div>
+                                </div>
+                            </label>
+                            <div class="rating-scale small" data-question="featureExams">
                                 <div class="rating-item" data-value="1">1</div>
                                 <div class="rating-item" data-value="2">2</div>
                                 <div class="rating-item" data-value="3">3</div>
                                 <div class="rating-item" data-value="4">4</div>
                                 <div class="rating-item" data-value="5">5</div>
                             </div>
-                            <input type="hidden" name="featureActivities" class="feature-rating-input">
+                            <input type="hidden" name="featureExams" id="input-featureExams">
+                        </div>
+                        
+                        <div style="margin-bottom: 20px;">
+                            <label style="font-weight: 600; color: #2c3e50; font-size: 1.05em;">
+                                5. نظام إدارة الأنشطة والواجبات
+                            </label>
+                            <div class="rating-scale small" data-question="featureActivities">
+                                <div class="rating-item" data-value="1">1</div>
+                                <div class="rating-item" data-value="2">2</div>
+                                <div class="rating-item" data-value="3">3</div>
+                                <div class="rating-item" data-value="4">4</div>
+                                <div class="rating-item" data-value="5">5</div>
+                            </div>
+                            <input type="hidden" name="featureActivities" id="input-featureActivities">
                         </div>
                     </div>
                 </div>
@@ -911,7 +957,7 @@
                 
                 <div class="question-group">
                     <label class="question required">الرضا العام عن فكرة النظام المقترح</label>
-                    <div class="rating-scale">
+                    <div class="rating-scale" data-question="overallSatisfaction">
                         <div class="rating-item" data-value="5">
                             <div class="rating-value">5</div>
                             <div class="rating-label">مرتفع جداً</div>
@@ -933,7 +979,7 @@
                             <div class="rating-label">منخفض جداً</div>
                         </div>
                     </div>
-                    <input type="hidden" id="overallSatisfaction" name="overallSatisfaction" required>
+                    <input type="hidden" name="overallSatisfaction" id="input-overallSatisfaction" required>
                 </div>
             </div>
 
@@ -972,10 +1018,228 @@
     </div>
 
     <script>
-        // متغيرات التتبع
+        // ========== متغيرات النظام ==========
         let currentSection = 1;
         const totalSections = 5;
         const startTime = Date.now();
+        
+        // ========== نظام التقييم المحسن ==========
+        
+        // تهيئة نظام التقييم عند تحميل الصفحة
+        function initializeRatingSystem() {
+            console.log('🎯 بدء تهيئة نظام التقييم...');
+            
+            // 1. إنشاء الحقول المخفية إذا لم تكن موجودة
+            createHiddenInputs();
+            
+            // 2. إعداد مستمعات الأحداث
+            setupRatingListeners();
+            
+            // 3. تحميل أي تقييمات محفوظة
+            loadSavedRatings();
+            
+            console.log('✅ تم تهيئة نظام التقييم بنجاح');
+        }
+        
+        // إنشاء الحقول المخفية إذا لم تكن موجودة
+        function createHiddenInputs() {
+            const questions = [
+                'currentSystemRating',
+                'featureLectures',
+                'featureAttendance', 
+                'featureMonitoring',
+                'featureExams',
+                'featureActivities',
+                'overallSatisfaction'
+            ];
+            
+            questions.forEach(question => {
+                let input = document.getElementById(`input-${question}`);
+                if (!input) {
+                    input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = question;
+                    input.id = `input-${question}`;
+                    
+                    // إضافة إلى DOM في مكان مناسب
+                    const ratingScale = document.querySelector(`.rating-scale[data-question="${question}"]`);
+                    if (ratingScale) {
+                        const parent = ratingScale.closest('.question-group') || ratingScale.parentNode;
+                        parent.appendChild(input);
+                    }
+                }
+            });
+        }
+        
+        // إعداد مستمعات الأحداث للتقييم
+        function setupRatingListeners() {
+            console.log('🔄 إعداد مستمعات التقييم...');
+            
+            // إزالة أي مستمعات سابقة
+            document.querySelectorAll('.rating-item').forEach(item => {
+                item.replaceWith(item.cloneNode(true));
+            });
+            
+            // إضافة مستمعات جديدة
+            document.querySelectorAll('.rating-item').forEach(item => {
+                item.addEventListener('click', handleRatingClick);
+            });
+            
+            console.log(`✅ تم إعداد ${document.querySelectorAll('.rating-item').length} عنصر تقييم`);
+        }
+        
+        // معالجة النقر على عنصر التقييم
+        function handleRatingClick(event) {
+            const clickedItem = event.currentTarget;
+            const ratingValue = clickedItem.getAttribute('data-value');
+            
+            // 1. العثور على مجموعة التقييم الخاصة بهذا العنصر
+            const ratingScale = clickedItem.closest('.rating-scale');
+            if (!ratingScale) {
+                console.error('❌ لم يتم العثور على مجموعة التقييم');
+                return;
+            }
+            
+            // 2. الحصول على اسم السؤال
+            const questionName = ratingScale.getAttribute('data-question');
+            if (!questionName) {
+                console.error('❌ لم يتم العثور على اسم السؤال');
+                return;
+            }
+            
+            console.log(`📝 النقر على: ${questionName} - القيمة: ${ratingValue}`);
+            
+            // 3. إزالة التحديد من جميع العناصر في نفس المجموعة فقط
+            const allItemsInScale = ratingScale.querySelectorAll('.rating-item');
+            allItemsInScale.forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // 4. إضافة التحديد للعنصر المضغوط فقط
+            clickedItem.classList.add('active');
+            
+            // 5. تحديث الحقل المخفي الخاص بهذا السؤال فقط
+            updateHiddenInput(questionName, ratingValue);
+            
+            // 6. إضافة تأثير بصري
+            addRatingFeedback(clickedItem);
+            
+            // 7. منع انتشار الحدث
+            event.stopPropagation();
+            return false;
+        }
+        
+        // تحديث الحقل المخفي
+        function updateHiddenInput(questionName, value) {
+            const inputId = `input-${questionName}`;
+            let hiddenInput = document.getElementById(inputId);
+            
+            if (!hiddenInput) {
+                // محاولة إيجاد الحقل بأي طريقة
+                hiddenInput = document.querySelector(`input[name="${questionName}"]`);
+                if (!hiddenInput) {
+                    console.error(`❌ لم يتم العثور على الحقل: ${questionName}`);
+                    return;
+                }
+            }
+            
+            hiddenInput.value = value;
+            console.log(`✅ تم تعيين ${value} للحقل: ${questionName}`);
+            
+            // التحقق من أن القيمة تم تعيينها
+            setTimeout(() => {
+                console.log(`✅ تأكيد: ${questionName} = ${hiddenInput.value}`);
+            }, 100);
+        }
+        
+        // تأثير بصري عند النقر
+        function addRatingFeedback(element) {
+            const originalTransform = element.style.transform;
+            const originalBoxShadow = element.style.boxShadow;
+            
+            element.style.transform = 'scale(1.15)';
+            element.style.boxShadow = '0 8px 25px rgba(52, 152, 219, 0.3)';
+            
+            setTimeout(() => {
+                element.style.transform = originalTransform;
+                element.style.boxShadow = originalBoxShadow;
+            }, 300);
+        }
+        
+        // تحميل التقييمات المحفوظة
+        function loadSavedRatings() {
+            const ratingInputs = document.querySelectorAll('input[type="hidden"][name^="feature"], input[type="hidden"][name="currentSystemRating"], input[type="hidden"][name="overallSatisfaction"]');
+            
+            ratingInputs.forEach(input => {
+                if (input.value) {
+                    const questionName = input.name;
+                    const ratingValue = input.value;
+                    const ratingScale = document.querySelector(`.rating-scale[data-question="${questionName}"]`);
+                    
+                    if (ratingScale) {
+                        // إزالة active من جميع العناصر
+                        ratingScale.querySelectorAll('.rating-item').forEach(item => {
+                            item.classList.remove('active');
+                        });
+                        
+                        // إضافة active للعنصر المناسب
+                        const targetItem = ratingScale.querySelector(`.rating-item[data-value="${ratingValue}"]`);
+                        if (targetItem) {
+                            targetItem.classList.add('active');
+                            console.log(`📥 تم تحميل التقييم: ${questionName} = ${ratingValue}`);
+                        }
+                    }
+                }
+            });
+        }
+        
+        // التحقق من صحة جميع التقييمات
+        function validateAllRatings() {
+            const requiredRatings = [
+                'featureLectures',
+                'featureAttendance',
+                'featureMonitoring', 
+                'featureExams',
+                'featureActivities',
+                'overallSatisfaction'
+            ];
+            
+            let allValid = true;
+            let missingRatings = [];
+            
+            requiredRatings.forEach(question => {
+                const input = document.getElementById(`input-${question}`) || 
+                              document.querySelector(`input[name="${question}"]`);
+                
+                if (!input || !input.value || input.value.trim() === '') {
+                    allValid = false;
+                    missingRatings.push(question);
+                    
+                    // تسليط الضوء على السؤال
+                    const ratingScale = document.querySelector(`.rating-scale[data-question="${question}"]`);
+                    if (ratingScale) {
+                        ratingScale.style.border = '2px solid #e74c3c';
+                        ratingScale.style.borderRadius = '10px';
+                        ratingScale.style.padding = '5px';
+                        
+                        // إزالة التأثير بعد 3 ثوان
+                        setTimeout(() => {
+                            ratingScale.style.border = '';
+                            ratingScale.style.padding = '';
+                        }, 3000);
+                    }
+                }
+            });
+            
+            if (!allValid) {
+                console.warn('❌ تقييمات ناقصة:', missingRatings);
+                showNotification('error', `يرجى تقييم: ${missingRatings.length} ميزة`);
+            }
+            
+            return allValid;
+        }
+        
+        // ========== نظام التنقل بين الأقسام ==========
         
         // تهيئة الصفحة
         function init() {
@@ -1005,12 +1269,19 @@
             document.getElementById('nextBtn').style.display = sectionNumber === totalSections ? 'none' : 'flex';
             document.getElementById('submitBtn').style.display = sectionNumber === totalSections ? 'flex' : 'none';
             
-            // إضافة تأثير الظهور
+            // تأثير الظهور
             const section = document.getElementById(`section${sectionNumber}`);
-            section.style.animation = 'none';
+            section.style.opacity = '0';
+            section.style.transform = 'translateY(20px)';
+            
             setTimeout(() => {
-                section.style.animation = 'slideIn 0.5s ease-out forwards';
+                section.style.transition = 'all 0.5s ease';
+                section.style.opacity = '1';
+                section.style.transform = 'translateY(0)';
             }, 10);
+            
+            // التمرير للأعلى
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
         
         // الانتقال للقسم التالي
@@ -1024,7 +1295,6 @@
                 currentSection++;
                 updateProgress();
                 showSection(currentSection);
-                window.scrollTo({ top: 0, behavior: 'smooth' });
             }
         }
         
@@ -1034,7 +1304,6 @@
                 currentSection--;
                 updateProgress();
                 showSection(currentSection);
-                window.scrollTo({ top: 0, behavior: 'smooth' });
             }
         }
         
@@ -1046,37 +1315,28 @@
             for (const input of requiredInputs) {
                 if (!input.value || (input.type === 'radio' && !section.querySelector(`input[name="${input.name}"]:checked`))) {
                     input.style.borderColor = '#e74c3c';
+                    input.style.boxShadow = '0 0 0 2px rgba(231, 76, 60, 0.2)';
+                    
                     setTimeout(() => {
                         input.style.borderColor = '#ddd';
+                        input.style.boxShadow = '';
                     }, 2000);
+                    
+                    // التمرير للحقل المطلوب
+                    input.scrollIntoView({ behavior: 'smooth', block: 'center' });
                     return false;
                 }
             }
+            
+            // إذا كان القسم 3 (ميزات النظام)، تحقق من التقييمات
+            if (currentSection === 3) {
+                return validateAllRatings();
+            }
+            
             return true;
         }
         
-        // إعداد تقييمات النقر
-        function setupRatingListeners() {
-            document.querySelectorAll('.rating-item').forEach(item => {
-                item.addEventListener('click', function() {
-                    const parent = this.closest('.question-group');
-                    const hiddenInput = parent.querySelector('input[type="hidden"]');
-                    
-                    // إزالة النشاط من جميع العناصر في نفس المجموعة
-                    parent.querySelectorAll('.rating-item').forEach(el => {
-                        el.classList.remove('active');
-                    });
-                    
-                    // إضافة النشاط للعنصر المحدد
-                    this.classList.add('active');
-                    
-                    // تعيين القيمة في الحقل المخفي
-                    if (hiddenInput) {
-                        hiddenInput.value = this.dataset.value;
-                    }
-                });
-            });
-        }
+        // ========== نظام الإشعارات ==========
         
         // إظهار الإشعار
         function showNotification(type, message) {
@@ -1089,25 +1349,39 @@
             }
             
             notification.style.display = 'block';
+            notification.style.animation = 'slideIn 0.3s ease-out';
             
+            // إخفاء تلقائي بعد 5 ثوان
             setTimeout(() => {
-                notification.style.display = 'none';
+                notification.style.animation = 'slideOut 0.3s ease-out';
+                setTimeout(() => {
+                    notification.style.display = 'none';
+                }, 300);
             }, 5000);
         }
+        
+        // ========== إرسال الاستبيان ==========
         
         // إرسال الاستبيان
         document.getElementById('surveyForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
+            // التحقق النهائي من جميع الحقول
             if (!validateCurrentSection()) {
                 showNotification('error', 'يرجى ملء جميع الحقول المطلوبة');
+                return;
+            }
+            
+            // التحقق من التقييمات
+            if (!validateAllRatings()) {
+                showNotification('error', 'يرجى تقييم جميع الميزات من 1 إلى 5');
                 return;
             }
             
             // جمع البيانات
             const formData = new FormData(this);
             const data = {
-                name: formData.get('fullName') || '', // اختياري
+                name: formData.get('fullName') || '',
                 gender: formData.get('gender') || 'غير محدد',
                 major: formData.get('major'),
                 academicLevel: formData.get('academicLevel'),
@@ -1133,6 +1407,9 @@
                 completionTime: Math.round((Date.now() - startTime) / 1000 / 60) // بالدقائق
             };
             
+            // التحقق من البيانات قبل الإرسال
+            console.log('📤 إرسال البيانات:', data);
+            
             try {
                 const response = await fetch('/api/survey/student', {
                     method: 'POST',
@@ -1153,15 +1430,117 @@
                     showNotification('error', result.message || 'حدث خطأ في الإرسال');
                 }
             } catch (error) {
+                console.error('❌ خطأ في الإرسال:', error);
                 showNotification('error', 'حدث خطأ في الاتصال بالخادم');
             }
         });
         
-        // تهيئة الصفحة عند التحميل
+        // ========== تهيئة الصفحة عند التحميل ==========
+        
         window.onload = function() {
+            console.log('🚀 تحميل صفحة استبيان الطلاب...');
+            
+            // 1. تهيئة أساسية
             init();
-            setupRatingListeners();
+            
+            // 2. تهيئة نظام التقييم المحسن
+            initializeRatingSystem();
+            
+            // 3. إضافة أنماط CSS للحركات
+            addAnimationStyles();
+            
+            console.log('✅ تم تحميل الصفحة بنجاح');
         };
+        
+        // إضافة أنماط CSS للحركات
+        function addAnimationStyles() {
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes slideIn {
+                    from {
+                        transform: translateX(100%);
+                        opacity: 0;
+                    }
+                    to {
+                        transform: translateX(0);
+                        opacity: 1;
+                    }
+                }
+                
+                @keyframes slideOut {
+                    from {
+                        transform: translateX(0);
+                        opacity: 1;
+                    }
+                    to {
+                        transform: translateX(100%);
+                        opacity: 0;
+                    }
+                }
+            `;
+            document.head.appendChild(style);
+        }
+        
+        // ========== دوال مساعدة للاختبار ==========
+        
+        // اختبار النظام (للتنمية فقط)
+        function testRatingSystem() {
+            console.log('🧪 اختبار نظام التقييم...');
+            
+            const questions = [
+                'featureLectures',
+                'featureAttendance', 
+                'featureMonitoring',
+                'featureExams',
+                'featureActivities'
+            ];
+            
+            questions.forEach((question, index) => {
+                setTimeout(() => {
+                    const ratingScale = document.querySelector(`.rating-scale[data-question="${question}"]`);
+                    if (ratingScale) {
+                        const items = ratingScale.querySelectorAll('.rating-item');
+                        const randomItem = items[Math.floor(Math.random() * items.length)];
+                        randomItem.click();
+                        console.log(`✅ اختبار: ${question} = ${randomItem.dataset.value}`);
+                    }
+                }, index * 500);
+            });
+        }
+        
+        // عرض القيم الحالية
+        function showCurrentRatings() {
+            console.log('📊 القيم الحالية:');
+            
+            const questions = [
+                'currentSystemRating',
+                'featureLectures',
+                'featureAttendance', 
+                'featureMonitoring',
+                'featureExams',
+                'featureActivities',
+                'overallSatisfaction'
+            ];
+            
+            questions.forEach(question => {
+                const input = document.getElementById(`input-${question}`) || 
+                              document.querySelector(`input[name="${question}"]`);
+                console.log(`${question}: ${input ? input.value : 'غير موجود'}`);
+            });
+        }
+        
+        // إعادة تعيين جميع التقييمات
+        function resetAllRatings() {
+            document.querySelectorAll('.rating-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            document.querySelectorAll('input[type="hidden"][name^="feature"], input[type="hidden"][name="currentSystemRating"], input[type="hidden"][name="overallSatisfaction"]').forEach(input => {
+                input.value = '';
+            });
+            
+            console.log('🔄 تم إعادة تعيين جميع التقييمات');
+        }
     </script>
 </body>
 </html>
